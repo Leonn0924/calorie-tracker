@@ -1,4 +1,4 @@
-import { format, parseISO, isToday, isThisWeek, isThisMonth, startOfWeek, endOfWeek, eachDayOfInterval, subDays } from 'date-fns'
+import { format, parseISO, isToday, isThisWeek, isThisMonth, startOfWeek, endOfWeek, eachDayOfInterval, subDays, addDays as addDaysFns } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 
 /**
@@ -7,6 +7,20 @@ import { zhCN } from 'date-fns/locale'
 export function formatDate(date: Date | string): string {
   const d = typeof date === 'string' ? parseISO(date) : date
   return format(d, 'yyyy-MM-dd')
+}
+
+/**
+ * 解析日期字符串为 Date 对象
+ */
+export function parseDate(dateStr: string): Date {
+  return parseISO(dateStr)
+}
+
+/**
+ * 日期增加天数
+ */
+export function addDays(date: Date, days: number): Date {
+  return addDaysFns(date, days)
 }
 
 /**
