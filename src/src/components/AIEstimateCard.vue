@@ -4,7 +4,6 @@
       <h3 class="text-lg font-semibold text-gray-800">AI 估算结果</h3>
       <div class="flex items-center gap-2">
         <span
-          v-if="result.confidence"
           :class="confidenceClass"
           class="px-3 py-1 rounded-full text-sm font-medium"
         >

@@ -16,7 +16,14 @@
       </div>
 
       <!-- Today Summary -->
-      <TodaySummary :stats="dailyStats" />
+      <TodaySummary
+        :budget="dailyStats.budget"
+        :intake="dailyStats.intake"
+        :exercise="dailyStats.exercise"
+        :netDeficit="dailyStats.netDeficit"
+        :tdee="settings.tdee"
+        :status="dailyStats.status"
+      />
 
       <!-- Navigation -->
       <nav class="flex-1 px-4 mt-6 space-y-1">
@@ -88,8 +95,10 @@ import FoodLibraryView from '@/views/FoodLibraryView.vue'
 import StatsView from '@/views/StatsView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { useDailyStats } from '@/composables/useDailyStats'
+import { useSettings } from '@/composables/useSettings'
 
 const { dailyStats } = useDailyStats()
+const { settings } = useSettings()
 
 const currentTab = ref<'record' | 'food' | 'stats' | 'settings'>('record')
 

@@ -92,13 +92,14 @@ npm run preview
 - [x] useAIEstimation composable
 - [x] 17 个单元测试全部通过
 
-### Phase 4: 饮食记录
-- [ ] AI 智能描述输入
-- [ ] 快捷记录（搜索 + 克数）
-- [ ] 三餐分区展示
-- [ ] 编辑/删除功能
-- [ ] 今日缺口概览
-- [ ] 热量颜色标识
+### Phase 4: 饮食记录 ✅
+- [x] AI 智能描述输入组件（AIInput.vue）
+- [x] 快捷记录组件（QuickRecord.vue）
+- [x] 三餐分区展示组件（MealSections.vue）
+- [x] 今日缺口概览组件（TodaySummary.vue）
+- [x] 编辑/删除功能
+- [x] 热量颜色标识（绿/黄/红）
+- [x] RecordView 整合所有组件
 
 ### Phase 5: 食物库
 - [ ] 内置食物库数据（20+ 条目）

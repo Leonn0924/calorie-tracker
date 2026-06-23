@@ -147,7 +147,7 @@ function estimateFoodItem(item: string): AIEstimateItem {
   if (searchResults.length > 0) {
     // 使用第一个匹配结果
     matchedFood = searchResults[0]
-    grams = matchedFood.commonPortion
+    grams = matchedFood.commonPortion || 100
     caloriesPer100g = matchedFood.caloriesPer100g
     foodName = matchedFood.name
     matched = true

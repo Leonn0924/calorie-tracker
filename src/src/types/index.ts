@@ -1,5 +1,5 @@
 // 枚举定义
-export type FoodCategory = '主食' | '肉类' | '蔬菜' | '水果' | '饮品' | '零食' | '调味品' | '其他'
+export type FoodCategory = '主食' | '肉类' | '蛋奶' | '蔬菜' | '水果' | '饮品' | '零食' | '豆类' | '坚果' | '调味品' | '其他'
 export type MealType = '早餐' | '午餐' | '晚餐' | '加餐'
 export type ActivityLevel = 1 | 2 | 3 | 4 | 5
 export type DeficitStatus = 'in_deficit' | 'near_limit' | 'over_budget'
@@ -16,11 +16,14 @@ export interface FoodItem {
   category: FoodCategory
   caloriesPer100g: number
   unit: 'g' | 'ml'
-  isCustom: boolean
+  isBuiltin?: boolean
+  isCustom?: boolean
+  commonPortion?: number
+  aliases?: string[]
   protein?: number      // 每100g蛋白质 (v1.1)
   carbs?: number        // 每100g碳水 (v1.1)
   fat?: number          // 每100g脂肪 (v1.1)
-  createdAt: string
+  createdAt?: string
 }
 
 // 饮食记录

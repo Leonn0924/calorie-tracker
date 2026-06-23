@@ -426,7 +426,7 @@ export function searchFood(query: string): FoodItem[] {
   const lowerQuery = query.toLowerCase()
   return builtinFoods.filter(food =>
     food.name.toLowerCase().includes(lowerQuery) ||
-    food.aliases.some(alias => alias.toLowerCase().includes(lowerQuery))
+    (food.aliases?.some((alias: string) => alias.toLowerCase().includes(lowerQuery)) ?? false)
   )
 }
 

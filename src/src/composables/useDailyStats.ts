@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import type { DailyStats, MealRecord, ExerciseRecord, DeficitStatus } from '@/types'
 import { storage } from '@/utils/storage'
-import { getToday, formatDate } from '@/utils/date'
+import { getToday } from '@/utils/date'
 import {
   calculateCalories,
   calculateNetDeficit,

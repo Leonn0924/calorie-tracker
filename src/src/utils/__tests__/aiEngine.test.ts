@@ -12,7 +12,7 @@ vi.mock('../storage', () => ({
 
 // Mock ruleEngine and llmClient
 vi.mock('../ruleEngine', () => ({
-  ruleEngine: vi.fn((input: string) => ({
+  ruleEngine: vi.fn((_input: string) => ({
     mealType: '午餐' as const,
     items: [
       {
