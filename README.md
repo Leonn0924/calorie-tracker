@@ -82,12 +82,15 @@ npm run preview
 - [x] useSettings composable
 - [x] useDailyStats composable
 
-### Phase 3: AI 估算引擎
-- [ ] 规则引擎（关键词拆分 + 标准份量表）
-- [ ] 食物模糊匹配
-- [ ] 大模型模式（fetch + 超时/降级）
-- [ ] 混合模式
-- [ ] Prompt 模板 + JSON 解析
+### Phase 3: AI 估算引擎 ✅
+- [x] 规则引擎（关键词拆分 + 标准份量表）
+- [x] 食物库匹配（28 种常见食物，支持别名搜索）
+- [x] 大模型客户端（OpenAI 兼容 API）
+- [x] 混合模式（规则优先，LLM 兜底）
+- [x] Prompt 模板 + JSON 解析
+- [x] AI 估算结果卡片组件
+- [x] useAIEstimation composable
+- [x] 17 个单元测试全部通过
 
 ### Phase 4: 饮食记录
 - [ ] AI 智能描述输入
