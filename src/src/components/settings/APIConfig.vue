@@ -140,7 +140,7 @@ async function testConnection() {
   testResult.value = null
 
   try {
-    const success = await testLLMConnection({
+    const result = await testLLMConnection({
       apiEndpoint: form.value.apiEndpoint,
       apiKey: form.value.apiKey,
       modelName: form.value.modelName,
@@ -150,9 +150,16 @@ async function testConnection() {
       createdAt: new Date().toISOString(),
     })
 
-    testResult.value = {
-      success,
-      message: success ? '连接成功！API 配置有效。' : '连接失败，请检查配置。',
+    if (result.success) {
+      testResult.value = {
+        success: true,
+        message: '连接成功！API 配置有效。',
+      }
+    } else {
+      testResult.value = {
+        success: false,
+        message: result.error || '连接失败，请检查配置。',
+      }
     }
   } catch (error) {
     testResult.value = {

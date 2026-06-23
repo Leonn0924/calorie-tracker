@@ -108,10 +108,23 @@ export async function callLLM(
     }
 
     const data = await response.json()
-    const content = data.choices?.[0]?.message?.content
+
+    // 调试：打印原始响应（开发环境）
+    if (import.meta.env.DEV) {
+      console.log('[LLM Debug] 原始响应:', JSON.stringify(data))
+    }
+
+    // 尝试多种可能的响应格式
+    const content =
+      data.choices?.[0]?.message?.content || // OpenAI 格式
+      data.output?.text ||                    // 阿里云格式
+      data.result ||                          // 其他格式
+      data.content ||                         // 简单格式
+      null
 
     if (!content) {
-      throw new Error('API 返回内容为空')
+      console.error('[LLM Debug] 无法解析响应:', JSON.stringify(data))
+      throw new Error(`API 返回内容格式不正确。响应结构：${Object.keys(data).join(', ')}`)
     }
 
     // 解析 JSON
@@ -180,11 +193,12 @@ function parseLLMResponse(content: string): EstimateResult {
 /**
  * 测试 LLM 连接
  */
-export async function testLLMConnection(config: LLMConfig): Promise<boolean> {
+export async function testLLMConnection(config: LLMConfig): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await callLLM('一个苹果', config)
-    return response.items.length > 0
+    return { success: response.items.length > 0 }
   } catch (error) {
-    return false
+    const errorMessage = error instanceof Error ? error.message : '未知错误'
+    return { success: false, error: errorMessage }
   }
 }
