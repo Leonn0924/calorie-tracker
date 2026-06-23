@@ -122,6 +122,16 @@ export function useDailyStats() {
     storage.set(EXERCISES_KEY, allExercises.value)
   }
 
+  // 按日期获取饮食记录
+  function getMealsByDate(date: string): MealRecord[] {
+    return allMeals.value.filter(m => m.date === date)
+  }
+
+  // 按日期获取运动记录
+  function getExercisesByDate(date: string): ExerciseRecord[] {
+    return allExercises.value.filter(e => e.date === date)
+  }
+
   return {
     dailyStats,
     todayMeals,
@@ -136,5 +146,7 @@ export function useDailyStats() {
     addExercise,
     removeExercise,
     clearToday,
+    getMealsByDate,
+    getExercisesByDate,
   }
 }
