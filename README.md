@@ -72,12 +72,15 @@ npm run preview
 - [x] 日期工具封装（date-fns）
 - [x] 基础布局框架（侧边栏 + Tab 切换）
 
-### Phase 2: 核心计算引擎
-- [ ] BMR 计算（Mifflin-St Jeor 公式）
-- [ ] TDEE / 每日预算 / 缺口状态计算
-- [ ] 目标模式自动计算
-- [ ] 安全校验
-- [ ] 净缺口计算（含运动消耗）
+### Phase 2: 核心计算引擎 ✅
+- [x] BMR 计算（Mifflin-St Jeor 公式）
+- [x] TDEE / 每日预算 / 缺口状态计算
+- [x] 目标模式自动计算
+- [x] 安全校验
+- [x] 净缺口计算（含运动消耗）
+- [x] 25 个单元测试全部通过
+- [x] useSettings composable
+- [x] useDailyStats composable
 
 ### Phase 3: AI 估算引擎
 - [ ] 规则引擎（关键词拆分 + 标准份量表）
