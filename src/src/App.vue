@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row bg-gray-50">
     <!-- Desktop Sidebar -->
-    <aside class="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 shadow-sm z-30">
+    <aside class="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 shadow-sm z-30 overflow-y-auto">
       <!-- Logo -->
       <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-health-green to-health-cyan flex items-center justify-center text-white">
