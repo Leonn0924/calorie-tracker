@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import type { UserSettings, ActivityLevel, GoalMode } from '@/types'
+import type { UserSettings, ActivityLevel, GoalMode, EstimateMode, LLMConfig } from '@/types'
 import { storage } from '@/utils/storage'
 import {
   calculateBMR,
@@ -27,6 +27,7 @@ const defaultSettings: UserSettings = {
   bmr: 1749,
   tdee: 2405,
   dailyBudget: 2833,
+  estimateMode: 'rule',
 }
 
 export function useSettings() {
@@ -98,6 +99,16 @@ export function useSettings() {
     settings.value.activityLevel = level
   }
 
+  // 更新估算模式
+  function updateEstimateMode(mode: EstimateMode) {
+    settings.value.estimateMode = mode
+  }
+
+  // 更新 LLM 配置
+  function updateLLMConfig(config: LLMConfig) {
+    settings.value.llmConfig = config
+  }
+
   // 重置为默认设置
   function resetSettings() {
     settings.value = defaultSettings
@@ -110,6 +121,8 @@ export function useSettings() {
     updateProfile,
     updateGoal,
     updateActivityLevel,
+    updateEstimateMode,
+    updateLLMConfig,
     resetSettings,
   }
 }

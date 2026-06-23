@@ -56,6 +56,8 @@ export interface UserSettings {
   bmr: number
   tdee: number
   dailyBudget: number
+  estimateMode?: EstimateMode
+  llmConfig?: LLMConfig
 }
 
 // 大模型配置
