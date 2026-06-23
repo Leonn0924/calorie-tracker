@@ -83,18 +83,21 @@ export interface ExerciseRecord {
   id: string
   date: string
   type: string
+  name: string
   icon: string
   duration: number
   calories: number
-  source: ExerciseSource
+  source?: ExerciseSource
   createdAt: string
 }
 
 // 运动预设
 export interface ExercisePreset {
+  id: string
   name: string
   icon: string
   metValue: number
+  category: string
 }
 
 // AI 估算项

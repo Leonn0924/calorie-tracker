@@ -111,13 +111,15 @@ npm run preview
 - [x] 自定义食物删除功能
 - [x] useFoodLibrary composable
 
-### Phase 6: 运动消耗
-- [ ] 预设运动数据（MET 值表）
-- [ ] 运动快捷记录 UI
-- [ ] 运动时长输入 + 消耗计算
-- [ ] 自定义运动表单
-- [ ] 运动日志列表
-- [ ] 运动记录存储
+### Phase 6: 运动消耗 ✅
+- [x] 预设运动数据（16 种常见运动，含 MET 值）
+- [x] 运动快捷记录 UI（按钮网格）
+- [x] 运动时长输入 + 消耗计算（MET × 体重 × 时间）
+- [x] 自定义运动表单
+- [x] 运动日志列表 + 删除
+- [x] 运动记录存储（LocalStorage）
+- [x] ExercisePanel 组件
+- [x] useExercise composable
 
 ### Phase 7: 统计页面
 - [ ] 今日缺口展示

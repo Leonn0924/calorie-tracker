@@ -27,6 +27,9 @@
       @edit="handleEditRecord"
       @delete="handleDeleteRecord"
     />
+
+    <!-- 运动消耗 -->
+    <ExercisePanel />
   </div>
 </template>
 
@@ -39,6 +42,7 @@ import TodaySummary from '@/components/TodaySummary.vue'
 import AIInput from '@/components/AIInput.vue'
 import QuickRecord from '@/components/QuickRecord.vue'
 import MealSections from '@/components/MealSections.vue'
+import ExercisePanel from '@/components/ExercisePanel.vue'
 
 const { dailyStats, addMeal, removeMeal } = useDailyStats()
 const { settings } = useSettings()
