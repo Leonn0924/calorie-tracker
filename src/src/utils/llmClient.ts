@@ -46,7 +46,7 @@ function buildSystemPrompt(): string {
   "items": [
     {
       "foodName": "食物名称",
-      "grams": 克数,
+      "grams": 克数，
       "calories": 热量（千卡）,
       "confidence": "high|medium|low",
       "note": "备注（如有特殊说明）"
@@ -91,20 +91,41 @@ export async function callLLM(
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), llmConfig.timeoutMs)
 
-    const response = await fetch(llmConfig.apiEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${llmConfig.apiKey}`,
-      },
-      body: JSON.stringify(requestBody),
-      signal: controller.signal,
-    })
+    let response: Response
+
+    try {
+      response = await fetch(llmConfig.apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${llmConfig.apiKey}`,
+        },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal,
+      })
+    } catch (networkError) {
+      clearTimeout(timeoutId)
+      // 网络错误（包括 CORS）
+      const errorMsg = networkError instanceof Error ? networkError.message : '未知网络错误'
+      console.error('[LLM Debug] 网络错误:', networkError)
+
+      if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError') || errorMsg.includes('Load failed')) {
+        throw new Error(
+          '网络连接失败。可能原因：\n' +
+          '1. CORS 跨域限制（浏览器阻止了请求）\n' +
+          '2. API 端点无法访问\n' +
+          '3. 网络或防火墙问题\n\n' +
+          '建议：检查 API 是否支持浏览器直接调用，或使用后端代理。'
+        )
+      }
+      throw networkError
+    }
 
     clearTimeout(timeoutId)
 
     if (!response.ok) {
-      throw new Error(`API 请求失败: ${response.status} ${response.statusText}`)
+      const errorText = await response.text().catch(() => '')
+      throw new Error(`API 请求失败：${response.status} ${response.statusText}\n${errorText}`)
     }
 
     const data = await response.json()
