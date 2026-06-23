@@ -63,7 +63,7 @@ function buildSystemPrompt(): string {
 }
 
 /**
- * 调用大模型 API
+ * 调用大模型 API（通过本地代理）
  */
 export async function callLLM(
   input: string,
@@ -91,16 +91,25 @@ export async function callLLM(
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), llmConfig.timeoutMs)
 
+    // 使用本地代理服务器
+    const proxyEndpoint = 'http://localhost:3001/api/llm'
+
     let response: Response
 
     try {
-      response = await fetch(llmConfig.apiEndpoint, {
+      response = await fetch(proxyEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${llmConfig.apiKey}`,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          apiEndpoint: llmConfig.apiEndpoint,
+          apiKey: llmConfig.apiKey,
+          modelName: llmConfig.modelName,
+          messages: requestBody.messages,
+          maxTokens: requestBody.max_tokens,
+          temperature: requestBody.temperature,
+        }),
         signal: controller.signal,
       })
     } catch (networkError) {
@@ -111,11 +120,12 @@ export async function callLLM(
 
       if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError') || errorMsg.includes('Load failed')) {
         throw new Error(
-          '网络连接失败。可能原因：\n' +
-          '1. CORS 跨域限制（浏览器阻止了请求）\n' +
-          '2. API 端点无法访问\n' +
-          '3. 网络或防火墙问题\n\n' +
-          '建议：检查 API 是否支持浏览器直接调用，或使用后端代理。'
+          '无法连接到代理服务器。请确保：\n' +
+          '1. 已启动后端代理服务器（cd backend && node server.js）\n' +
+          '2. 代理服务器运行在 http://localhost:3001\n\n' +
+          '启动命令：\n' +
+          '  cd /Users/lishengxuan_1/Desktop/project/热量记录/backend\n' +
+          '  node server.js'
         )
       }
       throw networkError
@@ -125,7 +135,7 @@ export async function callLLM(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => '')
-      throw new Error(`API 请求失败：${response.status} ${response.statusText}\n${errorText}`)
+      throw new Error(`代理请求失败：${response.status} ${response.statusText}\n${errorText}`)
     }
 
     const data = await response.json()
