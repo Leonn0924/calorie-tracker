@@ -104,7 +104,7 @@
 
     <!-- 状态提示 -->
     <div class="mt-3 p-2 rounded-lg flex items-center gap-2" :class="statusBgColor">
-      <span class="text-base">{{ statusIcon }}</span>
+      <Icons :name="statusIconName" size="sm" :class="statusIconColor" />
       <span class="text-xs font-medium" :class="statusTextColor">
         {{ statusMessage }}
       </span>
@@ -115,6 +115,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { DeficitStatus } from '@/types'
+import Icons from '@/components/icons/Icons.vue'
 
 const props = defineProps<{
   budget: number
@@ -203,12 +204,12 @@ const deficitValueColor = computed(() => {
   }
 })
 
-const statusIcon = computed(() => {
+const statusIconName = computed(() => {
   switch (props.status) {
-    case 'in_deficit': return '✅'
-    case 'near_limit': return '⚠️'
-    case 'over_budget': return '❌'
-    default: return '❓'
+    case 'in_deficit': return 'check-circle'
+    case 'near_limit': return 'exclamation-triangle'
+    case 'over_budget': return 'x-circle'
+    default: return 'information-circle'
   }
 })
 
@@ -223,10 +224,19 @@ const statusMessage = computed(() => {
 
 const statusBgColor = computed(() => {
   switch (props.status) {
-    case 'in_deficit': return 'bg-health-50'
+    case 'in_deficit': return 'bg-green-50'
     case 'near_limit': return 'bg-amber-50'
     case 'over_budget': return 'bg-red-50'
     default: return 'bg-gray-50'
+  }
+})
+
+const statusIconColor = computed(() => {
+  switch (props.status) {
+    case 'in_deficit': return 'text-green-600'
+    case 'near_limit': return 'text-amber-600'
+    case 'over_budget': return 'text-red-600'
+    default: return 'text-gray-600'
   }
 })
 
