@@ -105,8 +105,8 @@
       <!-- 测试结果 -->
       <div v-if="testResult" class="p-3 rounded-lg" :class="testResult.success ? 'bg-green-50' : 'bg-red-50'">
         <div class="flex items-start gap-2">
-          <span v-if="testResult.success" class="text-green-600">✅</span>
-          <span v-else class="text-red-600">❌</span>
+          <Icons v-if="testResult.success" name="check-circle" size="md" class="text-green-600" />
+          <Icons v-else name="x-circle" size="md" class="text-red-600" />
           <div class="flex-1 text-sm" :class="testResult.success ? 'text-green-700' : 'text-red-700'">
             {{ testResult.message }}
           </div>
@@ -120,6 +120,7 @@
 import { ref } from 'vue'
 import { useSettings } from '@/composables/useSettings'
 import { testLLMConnection } from '@/utils/llmClient'
+import Icons from '@/components/icons/Icons.vue'
 
 const { settings, updateLLMConfig } = useSettings()
 
