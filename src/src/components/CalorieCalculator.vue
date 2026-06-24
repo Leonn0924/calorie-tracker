@@ -85,10 +85,15 @@
       <!-- 提交按钮 -->
       <button
         type="submit"
-        :disabled="!foodName || !caloriesPer100g || !grams || calculatedCalories === 0"
-        class="w-full py-4 bg-gradient-to-r from-health-500 to-health-600 text-white font-bold text-lg rounded-lg hover:from-health-600 hover:to-health-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+        :disabled="!foodName || caloriesPer100g <= 0 || grams <= 0"
+        class="w-full py-4 bg-gradient-to-r from-health-500 to-health-600 text-white font-bold text-lg rounded-lg hover:from-health-600 hover:to-health-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
       >
-        ✅ 添加到记录（{{ calculatedCalories }} kcal）
+        <span v-if="calculatedCalories > 0">
+          ✅ 添加到记录（{{ calculatedCalories }} kcal）
+        </span>
+        <span v-else>
+          请填写完整信息
+        </span>
       </button>
     </form>
 
@@ -137,7 +142,15 @@ const calculatedCalories = computed(() => {
 })
 
 function handleSubmit() {
-  if (!foodName.value || !caloriesPer100g.value || !grams.value) return
+  if (!foodName.value || caloriesPer100g.value <= 0 || grams.value <= 0) return
+
+  console.log('[热量计算器] 提交记录:', {
+    foodName: foodName.value,
+    caloriesPer100g: caloriesPer100g.value,
+    grams: grams.value,
+    calories: calculatedCalories.value,
+    mealType: mealType.value,
+  })
 
   // 添加饮食记录
   addMeal({
@@ -151,15 +164,17 @@ function handleSubmit() {
     source: 'manual',
   })
 
+  console.log('[热量计算器] 记录已添加')
+
   // 显示成功提示
   showSuccess.value = true
 
-  // 3 秒后隐藏并重置表单
+  // 5 秒后隐藏并重置表单（给用户更多时间看到成功提示）
   setTimeout(() => {
     showSuccess.value = false
     foodName.value = ''
     caloriesPer100g.value = 0
     grams.value = 0
-  }, 3000)
+  }, 5000)
 }
 </script>

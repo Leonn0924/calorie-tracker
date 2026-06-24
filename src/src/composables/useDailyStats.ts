@@ -12,21 +12,21 @@ import { useSettings } from './useSettings'
 const MEALS_KEY = 'meals'
 const EXERCISES_KEY = 'exercises'
 
+// 全局状态，确保所有组件共享同一个数据
+const today = getToday()
+const globalAllMeals = ref<MealRecord[]>(storage.get<MealRecord[]>(MEALS_KEY) || [])
+const globalAllExercises = ref<ExerciseRecord[]>(storage.get<ExerciseRecord[]>(EXERCISES_KEY) || [])
+
 export function useDailyStats() {
   const { settings } = useSettings()
 
-  // 从存储中加载今日数据
-  const today = getToday()
-  const allMeals = ref<MealRecord[]>(storage.get<MealRecord[]>(MEALS_KEY) || [])
-  const allExercises = ref<ExerciseRecord[]>(storage.get<ExerciseRecord[]>(EXERCISES_KEY) || [])
-
   // 过滤今日数据
   const todayMeals = computed(() =>
-    allMeals.value.filter(m => m.date === today)
+    globalAllMeals.value.filter(m => m.date === today)
   )
 
   const todayExercises = computed(() =>
-    allExercises.value.filter(e => e.date === today)
+    globalAllExercises.value.filter(e => e.date === today)
   )
 
   // 计算今日统计
@@ -91,28 +91,28 @@ export function useDailyStats() {
       createdAt: new Date().toISOString(),
     }
 
-    allMeals.value.push(newMeal)
-    storage.set(MEALS_KEY, allMeals.value)
+    globalAllMeals.value.push(newMeal)
+    storage.set(MEALS_KEY, globalAllMeals.value)
   }
 
   // 删除饮食记录
   function removeMeal(id: string) {
-    allMeals.value = allMeals.value.filter(m => m.id !== id)
-    storage.set(MEALS_KEY, allMeals.value)
+    globalAllMeals.value = globalAllMeals.value.filter(m => m.id !== id)
+    storage.set(MEALS_KEY, globalAllMeals.value)
   }
 
   // 更新饮食记录
   function updateMeal(id: string, updates: Partial<MealRecord>) {
-    const index = allMeals.value.findIndex(m => m.id === id)
+    const index = globalAllMeals.value.findIndex(m => m.id === id)
     if (index !== -1) {
-      allMeals.value[index] = { ...allMeals.value[index], ...updates }
+      globalAllMeals.value[index] = { ...globalAllMeals.value[index], ...updates }
       if (updates.caloriesPer100g || updates.grams) {
-        allMeals.value[index].calories = calculateCalories(
-          allMeals.value[index].caloriesPer100g,
-          allMeals.value[index].grams
+        globalAllMeals.value[index].calories = calculateCalories(
+          globalAllMeals.value[index].caloriesPer100g,
+          globalAllMeals.value[index].grams
         )
       }
-      storage.set(MEALS_KEY, allMeals.value)
+      storage.set(MEALS_KEY, globalAllMeals.value)
     }
   }
 
@@ -124,32 +124,32 @@ export function useDailyStats() {
       createdAt: new Date().toISOString(),
     }
 
-    allExercises.value.push(newExercise)
-    storage.set(EXERCISES_KEY, allExercises.value)
+    globalAllExercises.value.push(newExercise)
+    storage.set(EXERCISES_KEY, globalAllExercises.value)
   }
 
   // 删除运动记录
   function removeExercise(id: string) {
-    allExercises.value = allExercises.value.filter(e => e.id !== id)
-    storage.set(EXERCISES_KEY, allExercises.value)
+    globalAllExercises.value = globalAllExercises.value.filter(e => e.id !== id)
+    storage.set(EXERCISES_KEY, globalAllExercises.value)
   }
 
   // 清空今日数据
   function clearToday() {
-    allMeals.value = allMeals.value.filter(m => m.date !== today)
-    allExercises.value = allExercises.value.filter(e => e.date !== today)
-    storage.set(MEALS_KEY, allMeals.value)
-    storage.set(EXERCISES_KEY, allExercises.value)
+    globalAllMeals.value = globalAllMeals.value.filter(m => m.date !== today)
+    globalAllExercises.value = globalAllExercises.value.filter(e => e.date !== today)
+    storage.set(MEALS_KEY, globalAllMeals.value)
+    storage.set(EXERCISES_KEY, globalAllExercises.value)
   }
 
   // 按日期获取饮食记录
   function getMealsByDate(date: string): MealRecord[] {
-    return allMeals.value.filter(m => m.date === date)
+    return globalAllMeals.value.filter(m => m.date === date)
   }
 
   // 按日期获取运动记录
   function getExercisesByDate(date: string): ExerciseRecord[] {
-    return allExercises.value.filter(e => e.date === date)
+    return globalAllExercises.value.filter(e => e.date === date)
   }
 
   return {
