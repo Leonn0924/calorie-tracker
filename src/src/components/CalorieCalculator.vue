@@ -85,10 +85,10 @@
       <!-- 提交按钮 -->
       <button
         type="submit"
-        :disabled="!foodName || !caloriesPer100g || !grams"
-        class="w-full py-3 bg-health-500 text-white font-medium rounded-lg hover:bg-health-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+        :disabled="!foodName || !caloriesPer100g || !grams || calculatedCalories === 0"
+        class="w-full py-4 bg-gradient-to-r from-health-500 to-health-600 text-white font-bold text-lg rounded-lg hover:from-health-600 hover:to-health-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
       >
-        添加到记录
+        ✅ 添加到记录（{{ calculatedCalories }} kcal）
       </button>
     </form>
 
