@@ -65,9 +65,9 @@
 
         <!-- 状态图标 -->
         <div class="w-8 text-center">
-          <span v-if="day.status === 'in_deficit'">✅</span>
-          <span v-else-if="day.status === 'near_limit'">️</span>
-          <span v-else>❌</span>
+          <Icons v-if="day.status === 'in_deficit'" name="check-circle" size="sm" class="text-green-600 mx-auto" />
+          <Icons v-else-if="day.status === 'near_limit'" name="exclamation-triangle" size="sm" class="text-yellow-600 mx-auto" />
+          <Icons v-else name="x-circle" size="sm" class="text-red-600 mx-auto" />
         </div>
       </div>
     </div>
@@ -168,6 +168,7 @@
 import { computed, ref } from 'vue'
 import type { DeficitStatus } from '@/types'
 import { formatDate, getDaysInMonth, getFirstDayOfMonth } from '@/utils/date'
+import Icons from '@/components/icons/Icons.vue'
 
 type Period = 'week' | 'month'
 
@@ -305,15 +306,15 @@ function getStatusClass(status: DeficitStatus | null) {
   }
 }
 
-function getStatusIcon(status: DeficitStatus | null) {
+function getStatusIconName(status: DeficitStatus | null) {
   if (!status) return ''
   switch (status) {
     case 'in_deficit':
-      return '✅'
+      return 'check-circle'
     case 'near_limit':
-      return '⚠️'
+      return 'exclamation-triangle'
     case 'over_budget':
-      return '❌'
+      return 'x-circle'
     default:
       return ''
   }
