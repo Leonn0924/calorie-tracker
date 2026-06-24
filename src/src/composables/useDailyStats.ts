@@ -1,5 +1,5 @@
 import { ref, computed } from 'vue'
-import type { DailyStats, MealRecord, ExerciseRecord, DeficitStatus } from '@/types'
+import type { DailyStats, MealRecord, ExerciseRecord, DeficitStatus, MealType, RecordSource, Confidence } from '@/types'
 import { storage } from '@/utils/storage'
 import { getToday } from '@/utils/date'
 import {
@@ -62,12 +62,32 @@ export function useDailyStats() {
   }))
 
   // 添加饮食记录
-  function addMeal(meal: Omit<MealRecord, 'id' | 'createdAt' | 'calories'>) {
-    const calories = calculateCalories(meal.caloriesPer100g, meal.grams)
+  function addMeal(meal: {
+    date: string
+    mealType: MealType
+    foodId: string
+    foodName: string
+    caloriesPer100g: number
+    grams: number
+    source: RecordSource
+    confidence?: Confidence
+    rawInput?: string
+    calories?: number // 可选，不提供则自动计算
+  }) {
+    // 如果没有提供 calories，自动计算
+    const calories = meal.calories || calculateCalories(meal.caloriesPer100g, meal.grams)
     const newMeal: MealRecord = {
-      ...meal,
       id: crypto.randomUUID(),
+      date: meal.date,
+      mealType: meal.mealType,
+      foodId: meal.foodId,
+      foodName: meal.foodName,
+      caloriesPer100g: meal.caloriesPer100g,
+      grams: meal.grams,
       calories,
+      source: meal.source,
+      confidence: meal.confidence,
+      rawInput: meal.rawInput,
       createdAt: new Date().toISOString(),
     }
 

@@ -26,6 +26,7 @@ app.post('/api/llm', async (req, res) => {
     }
 
     console.log(`[代理请求] 模型：${modelName}, 端点：${apiEndpoint}`);
+    console.log('[代理请求] 消息:', JSON.stringify(messages));
 
     // 转发请求到目标 API
     const response = await fetch(apiEndpoint, {
@@ -42,11 +43,24 @@ app.post('/api/llm', async (req, res) => {
       }),
     });
 
-    const data = await response.json();
+    console.log('[代理响应] 状态码:', response.status);
 
-    // 记录响应（调试用）
-    if (process.env.DEBUG) {
-      console.log('[代理响应]:', JSON.stringify(data, null, 2));
+    // 先获取原始文本
+    const responseText = await response.text();
+    console.log('[代理响应] 原始文本:', responseText);
+
+    // 尝试解析 JSON
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error('[代理错误] JSON 解析失败:', parseError);
+      console.error('[代理错误] 原始响应:', responseText);
+      return res.status(500).json({
+        error: 'API 返回了无效的 JSON',
+        rawResponse: responseText.substring(0, 500), // 只返回前 500 字符
+        status: response.status,
+      });
     }
 
     res.json(data);
@@ -54,7 +68,8 @@ app.post('/api/llm', async (req, res) => {
     console.error('[代理错误]:', error);
     res.status(500).json({
       error: '代理请求失败',
-      message: error.message
+      message: error.message,
+      stack: process.env.DEBUG ? error.stack : undefined,
     });
   }
 });

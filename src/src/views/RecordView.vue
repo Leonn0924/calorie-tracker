@@ -19,6 +19,12 @@
       @addCustom="showCustomFoodDialog = true"
     />
 
+    <!-- 快速 Kcal 输入 -->
+    <QuickKcalInput />
+
+    <!-- 热量计算器 -->
+    <CalorieCalculator />
+
     <!-- 三餐分区 -->
     <MealSections
       :records="dailyStats.meals"
@@ -41,6 +47,8 @@ import { useSettings } from '@/composables/useSettings'
 import TodaySummary from '@/components/TodaySummary.vue'
 import AIInput from '@/components/AIInput.vue'
 import QuickRecord from '@/components/QuickRecord.vue'
+import QuickKcalInput from '@/components/QuickKcalInput.vue'
+import CalorieCalculator from '@/components/CalorieCalculator.vue'
 import MealSections from '@/components/MealSections.vue'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 
