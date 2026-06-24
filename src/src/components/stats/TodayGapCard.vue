@@ -33,7 +33,8 @@
     <div class="mt-4 pt-4 border-t border-gray-100">
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-500">状态</span>
-        <span class="px-3 py-1 rounded-full text-sm font-medium" :class="statusBadgeClass">
+        <span class="px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1.5" :class="statusBadgeClass">
+          <Icons :name="statusIconName" size="sm" :class="statusIconColor" />
           {{ statusText }}
         </span>
       </div>
@@ -44,6 +45,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { DeficitStatus } from '@/types'
+import Icons from '@/components/icons/Icons.vue'
 
 interface GapData {
   budget: number
@@ -64,16 +66,30 @@ const deficitColor = computed(() => {
   return 'text-red-500'
 })
 
+const statusIconName = computed(() => {
+  switch (props.gap.status) {
+    case 'in_deficit': return 'check-circle'
+    case 'near_limit': return 'exclamation-triangle'
+    case 'over_budget': return 'x-circle'
+    default: return 'information-circle'
+  }
+})
+
+const statusIconColor = computed(() => {
+  switch (props.gap.status) {
+    case 'in_deficit': return 'text-green-700'
+    case 'near_limit': return 'text-yellow-700'
+    case 'over_budget': return 'text-red-700'
+    default: return 'text-gray-700'
+  }
+})
+
 const statusText = computed(() => {
   switch (props.gap.status) {
-    case 'in_deficit':
-      return '✅ 缺口达成'
-    case 'near_limit':
-      return '⚠️ 接近上限'
-    case 'over_budget':
-      return '❌ 已超支'
-    default:
-      return '未知'
+    case 'in_deficit': return '缺口达成'
+    case 'near_limit': return '接近上限'
+    case 'over_budget': return '已超支'
+    default: return '未知'
   }
 })
 
