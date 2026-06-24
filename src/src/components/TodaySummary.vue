@@ -63,7 +63,7 @@
           </svg>
           <span class="text-xs text-gray-500">预算</span>
         </div>
-        <div class="text-lg font-bold text-gray-800">{{ budget }}</div>
+        <div class="text-lg font-bold text-gray-800">{{ budget.toFixed(2) }}</div>
       </div>
 
       <!-- 已摄入 -->
@@ -74,7 +74,7 @@
           </svg>
           <span class="text-xs text-gray-500">已摄入</span>
         </div>
-        <div class="text-lg font-bold" :class="intakeColor">{{ intake }}</div>
+        <div class="text-lg font-bold" :class="intakeColor">{{ intake.toFixed(2) }}</div>
       </div>
 
       <!-- 运动消耗 -->
@@ -85,7 +85,7 @@
           </svg>
           <span class="text-xs text-gray-500">运动</span>
         </div>
-        <div class="text-lg font-bold text-health-600">{{ exercise }}</div>
+        <div class="text-lg font-bold text-health-600">{{ exercise.toFixed(2) }}</div>
       </div>
 
       <!-- 净缺口 -->
@@ -97,7 +97,7 @@
           <span class="text-xs" :class="deficitLabelColor">净缺口</span>
         </div>
         <div class="text-lg font-bold" :class="deficitValueColor">
-          {{ deficitSign }}{{ Math.abs(netDeficit) }}
+          {{ deficitSign }}{{ Math.abs(netDeficit).toFixed(2) }}
         </div>
       </div>
     </div>
