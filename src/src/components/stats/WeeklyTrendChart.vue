@@ -22,7 +22,8 @@
       </div>
     </div>
 
-    <div class="space-y-3 max-h-96 overflow-y-auto">
+    <!-- 本周视图：条形图 -->
+    <div v-if="period === 'week'" class="space-y-3">
       <div
         v-for="day in stats"
         :key="day.date"
@@ -65,8 +66,88 @@
         <!-- 状态图标 -->
         <div class="w-8 text-center">
           <span v-if="day.status === 'in_deficit'">✅</span>
-          <span v-else-if="day.status === 'near_limit'">⚠️</span>
+          <span v-else-if="day.status === 'near_limit'">️</span>
           <span v-else>❌</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 本月视图：日历热力图 -->
+    <div v-else class="space-y-4">
+      <!-- 月份导航 -->
+      <div class="flex items-center justify-between">
+        <button
+          @click="previousMonth"
+          class="px-3 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+        >
+          ← 上月
+        </button>
+        <span class="font-medium text-gray-800">{{ currentMonthLabel }}</span>
+        <button
+          @click="nextMonth"
+          class="px-3 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+        >
+          下月 →
+        </button>
+      </div>
+
+      <!-- 星期标题 -->
+      <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-500">
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div>六</div>
+        <div>日</div>
+      </div>
+
+      <!-- 日历网格 -->
+      <div class="grid grid-cols-7 gap-2">
+        <div
+          v-for="day in calendarDays"
+          :key="day.date"
+          :class="[
+            'aspect-square rounded-lg flex flex-col items-center justify-center p-2 transition-all',
+            day.isCurrentMonth ? 'cursor-pointer hover:scale-105' : 'opacity-30',
+            getStatusClass(day.status)
+          ]"
+          :title="day.date ? `${formatDate(day.date)}: ${getStatusLabel(day.status)}` : ''"
+        >
+          <span class="text-xs font-medium" :class="day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'">
+            {{ day.dayNumber }}
+          </span>
+          <span v-if="day.isCurrentMonth && day.status" class="text-lg mt-1">
+            {{ getStatusIcon(day.status) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- 统计信息 -->
+      <div class="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-1 mb-1">
+            <div class="w-3 h-3 rounded bg-green-500"></div>
+            <span class="text-xs text-gray-600">达标</span>
+          </div>
+          <div class="text-lg font-bold text-gray-800">{{ monthStats.inDeficitDays }}</div>
+          <div class="text-xs text-gray-500">天</div>
+        </div>
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-1 mb-1">
+            <div class="w-3 h-3 rounded bg-yellow-500"></div>
+            <span class="text-xs text-gray-600">接近</span>
+          </div>
+          <div class="text-lg font-bold text-gray-800">{{ monthStats.nearLimitDays }}</div>
+          <div class="text-xs text-gray-500">天</div>
+        </div>
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-1 mb-1">
+            <div class="w-3 h-3 rounded bg-red-500"></div>
+            <span class="text-xs text-gray-600">超支</span>
+          </div>
+          <div class="text-lg font-bold text-gray-800">{{ monthStats.overBudgetDays }}</div>
+          <div class="text-xs text-gray-500">天</div>
         </div>
       </div>
     </div>
@@ -86,17 +167,17 @@
         <span>已超支</span>
       </div>
       <div class="flex items-center gap-1">
-        <div class="w-3 h-0.5 border-t-2 border-dashed border-gray-400"></div>
-        <span>预算线</span>
+        <div class="w-3 h-3 rounded bg-gray-200"></div>
+        <span>无数据</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { DeficitStatus } from '@/types'
-import { formatDate } from '@/utils/date'
+import { formatDate, getDaysInMonth, getFirstDayOfMonth } from '@/utils/date'
 
 type Period = 'week' | 'month'
 
@@ -114,9 +195,12 @@ const props = defineProps<{
   period: Period
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   'update:period': [value: Period]
 }>()
+
+// 当前显示的月份（用于日历视图）
+const displayMonth = ref(new Date())
 
 const maxCalories = computed(() => {
   const maxIntake = Math.max(...props.stats.map(d => d.intake))
@@ -135,5 +219,132 @@ function getBarClass(status: DeficitStatus) {
     default:
       return 'bg-gray-500'
   }
+}
+
+// 日历相关计算
+const currentMonthLabel = computed(() => {
+  const year = displayMonth.value.getFullYear()
+  const month = displayMonth.value.getMonth() + 1
+  return `${year}年${month}月`
+})
+
+// 生成日历网格数据
+const calendarDays = computed(() => {
+  const year = displayMonth.value.getFullYear()
+  const month = displayMonth.value.getMonth()
+  const daysInMonth = getDaysInMonth(year, month)
+  const firstDay = getFirstDayOfMonth(year, month) // 0=周日，1=周一，...
+
+  // 调整到周一开始（周一=0，周日=6）
+  const startOffset = firstDay === 0 ? 6 : firstDay - 1
+
+  const days = []
+
+  // 上月填充
+  for (let i = startOffset - 1; i >= 0; i--) {
+    days.push({
+      date: null,
+      dayNumber: daysInMonth - i,
+      isCurrentMonth: false,
+      status: null,
+    })
+  }
+
+  // 当月日期
+  const statsMap = new Map(props.stats.map(s => [s.date, s]))
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    const stat = statsMap.get(date)
+
+    days.push({
+      date,
+      dayNumber: day,
+      isCurrentMonth: true,
+      status: stat?.status || null,
+    })
+  }
+
+  // 下月填充（补齐 42 格，6 行）
+  const remaining = 42 - days.length
+  for (let i = 1; i <= remaining; i++) {
+    days.push({
+      date: null,
+      dayNumber: i,
+      isCurrentMonth: false,
+      status: null,
+    })
+  }
+
+  return days
+})
+
+// 本月统计
+const monthStats = computed(() => {
+  const inDeficitDays = props.stats.filter(s => s.status === 'in_deficit').length
+  const nearLimitDays = props.stats.filter(s => s.status === 'near_limit').length
+  const overBudgetDays = props.stats.filter(s => s.status === 'over_budget').length
+
+  return {
+    inDeficitDays,
+    nearLimitDays,
+    overBudgetDays,
+    totalDays: props.stats.length,
+    achievementRate: props.stats.length > 0 ? Math.round((inDeficitDays / props.stats.length) * 100) : 0,
+  }
+})
+
+function getStatusClass(status: DeficitStatus | null) {
+  if (!status) return 'bg-gray-100'
+  switch (status) {
+    case 'in_deficit':
+      return 'bg-green-100 hover:bg-green-200'
+    case 'near_limit':
+      return 'bg-yellow-100 hover:bg-yellow-200'
+    case 'over_budget':
+      return 'bg-red-100 hover:bg-red-200'
+    default:
+      return 'bg-gray-100'
+  }
+}
+
+function getStatusIcon(status: DeficitStatus | null) {
+  if (!status) return ''
+  switch (status) {
+    case 'in_deficit':
+      return '✅'
+    case 'near_limit':
+      return '⚠️'
+    case 'over_budget':
+      return '❌'
+    default:
+      return ''
+  }
+}
+
+function getStatusLabel(status: DeficitStatus | null) {
+  if (!status) return '无数据'
+  switch (status) {
+    case 'in_deficit':
+      return '缺口达成'
+    case 'near_limit':
+      return '接近上限'
+    case 'over_budget':
+      return '已超支'
+    default:
+      return '未知'
+  }
+}
+
+function previousMonth() {
+  const newDate = new Date(displayMonth.value)
+  newDate.setMonth(newDate.getMonth() - 1)
+  displayMonth.value = newDate
+}
+
+function nextMonth() {
+  const newDate = new Date(displayMonth.value)
+  newDate.setMonth(newDate.getMonth() + 1)
+  displayMonth.value = newDate
 }
 </script>

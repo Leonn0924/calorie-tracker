@@ -101,6 +101,20 @@ export function getRecentDays(days: number): string[] {
 }
 
 /**
+ * 获取某月的天数
+ */
+export function getDaysInMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate()
+}
+
+/**
+ * 获取某月第一天是星期几（0=周日，1=周一，...6=周六）
+ */
+export function getFirstDayOfMonth(year: number, month: number): number {
+  return new Date(year, month, 1).getDay()
+}
+
+/**
  * 格式化时间戳为时间字符串 (如：08:30)
  */
 export function formatTime(date: Date | string): string {
