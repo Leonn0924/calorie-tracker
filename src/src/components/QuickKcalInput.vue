@@ -13,18 +13,15 @@
         <label class="block text-sm font-medium text-gray-700 mb-2">
           热量 (kcal) <span class="text-red-500">*</span>
         </label>
-        <div class="relative">
-          <input
-            v-model.number="kcalInput"
-            type="number"
-            min="1"
-            max="10000"
-            required
-            class="w-full px-4 py-3 text-2xl font-bold text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-health-500"
-            placeholder="0"
-          />
-          <div class="absolute right-3 top-3 text-sm text-gray-500">kcal</div>
-        </div>
+        <input
+          v-model.number="kcalInput"
+          type="number"
+          min="1"
+          max="10000"
+          required
+          class="w-full px-4 py-3 text-2xl font-bold text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-health-500"
+          placeholder="0"
+        />
       </div>
 
       <!-- 餐别选择 -->
