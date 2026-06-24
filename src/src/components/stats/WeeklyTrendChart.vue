@@ -102,49 +102,42 @@
         <div>日</div>
       </div>
 
-      <!-- 日历网格 -->
+      <!-- 日历网格（极简色块风格） -->
       <div class="grid grid-cols-7 gap-1">
         <div
           v-for="day in calendarDays"
           :key="day.date"
           :class="[
-            'aspect-square rounded flex flex-col items-center justify-center transition-all',
-            day.isCurrentMonth ? 'cursor-pointer hover:scale-110' : 'opacity-30',
-            getStatusClass(day.status)
+            'h-8 rounded-sm transition-all cursor-pointer',
+            getStatusClass(day.status),
+            day.isCurrentMonth ? 'hover:ring-2 hover:ring-health-green hover:ring-offset-1' : 'opacity-30'
           ]"
           :title="day.date ? `${formatDate(day.date)}: ${getStatusLabel(day.status)}` : ''"
         >
-          <span class="text-[10px] font-medium leading-tight" :class="day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'">
-            {{ day.dayNumber }}
-          </span>
-          <span v-if="day.isCurrentMonth && day.status" class="text-xs leading-tight">
-            {{ getStatusIcon(day.status) }}
-          </span>
+          <div v-if="day.isCurrentMonth" class="h-full flex items-center justify-center">
+            <span class="text-[10px] font-medium" :class="day.status ? 'text-white' : 'text-gray-400'">
+              {{ day.dayNumber }}
+            </span>
+          </div>
         </div>
       </div>
 
       <!-- 统计信息 -->
-      <div class="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100 text-xs">
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-1">
-            <div class="w-2 h-2 rounded bg-green-500"></div>
-            <span class="text-gray-600">达标</span>
-          </div>
-          <div class="font-bold text-gray-800">{{ monthStats.inDeficitDays }}天</div>
+      <div class="flex items-center justify-center gap-6 pt-3 border-t border-gray-100 text-xs">
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-3 rounded-sm bg-green-500"></div>
+          <span class="text-gray-600">达标</span>
+          <span class="font-bold text-gray-800">{{ monthStats.inDeficitDays }}天</span>
         </div>
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-1">
-            <div class="w-2 h-2 rounded bg-yellow-500"></div>
-            <span class="text-gray-600">接近</span>
-          </div>
-          <div class="font-bold text-gray-800">{{ monthStats.nearLimitDays }}天</div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-3 rounded-sm bg-yellow-500"></div>
+          <span class="text-gray-600">接近</span>
+          <span class="font-bold text-gray-800">{{ monthStats.nearLimitDays }}天</span>
         </div>
-        <div class="text-center">
-          <div class="flex items-center justify-center gap-1">
-            <div class="w-2 h-2 rounded bg-red-500"></div>
-            <span class="text-gray-600">超支</span>
-          </div>
-          <div class="font-bold text-gray-800">{{ monthStats.overBudgetDays }}天</div>
+        <div class="flex items-center gap-1.5">
+          <div class="w-3 h-3 rounded-sm bg-red-500"></div>
+          <span class="text-gray-600">超支</span>
+          <span class="font-bold text-gray-800">{{ monthStats.overBudgetDays }}天</span>
         </div>
       </div>
     </div>
@@ -295,11 +288,11 @@ function getStatusClass(status: DeficitStatus | null) {
   if (!status) return 'bg-gray-100'
   switch (status) {
     case 'in_deficit':
-      return 'bg-green-100 hover:bg-green-200'
+      return 'bg-green-500'
     case 'near_limit':
-      return 'bg-yellow-100 hover:bg-yellow-200'
+      return 'bg-yellow-500'
     case 'over_budget':
-      return 'bg-red-100 hover:bg-red-200'
+      return 'bg-red-500'
     default:
       return 'bg-gray-100'
   }
