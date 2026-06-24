@@ -30,7 +30,7 @@
       </div>
       <button
         type="submit"
-        class="w-full py-2 bg-health-500 text-white rounded-lg hover:bg-health-600 transition-colors"
+        class="w-full py-3 bg-health-green text-white font-medium rounded-lg hover:bg-health-green-dark transition-colors shadow-sm"
       >
         添加记录
       </button>

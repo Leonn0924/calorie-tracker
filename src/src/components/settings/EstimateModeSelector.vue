@@ -3,7 +3,7 @@
     <h3 class="text-lg font-semibold text-gray-800 mb-4">估算模式</h3>
 
     <div class="space-y-3">
-      <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'rule' ? 'border-health-500 bg-health-50' : 'border-gray-200'">
+      <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'rule' ? 'border-health-green bg-health-green-light' : 'border-gray-200'">
         <input
           v-model="selectedMode"
           type="radio"
@@ -19,7 +19,7 @@
         </div>
       </label>
 
-      <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'llm' ? 'border-health-500 bg-health-50' : 'border-gray-200'">
+      <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'llm' ? 'border-health-green bg-health-green-light' : 'border-gray-200'">
         <input
           v-model="selectedMode"
           type="radio"
@@ -35,7 +35,7 @@
         </div>
       </label>
 
-      <label class="flex items-start gap-3 p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'hybrid' ? 'border-health-500 bg-health-50' : 'border-gray-200'">
+      <label class="flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" :class="modelValue === 'hybrid' ? 'border-health-green bg-health-green-light' : 'border-gray-200'">
         <input
           v-model="selectedMode"
           type="radio"

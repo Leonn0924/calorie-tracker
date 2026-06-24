@@ -90,13 +90,13 @@
           type="button"
           @click="testConnection"
           :disabled="testing"
-          class="flex-1 py-2 border border-health-500 text-health-600 rounded-lg hover:bg-health-50 transition-colors disabled:opacity-50"
+          class="flex-1 py-3 border-2 border-health-green text-health-green-dark font-medium rounded-lg hover:bg-health-green-light transition-colors disabled:opacity-50"
         >
           {{ testing ? '测试中...' : '测试连接' }}
         </button>
         <button
           type="submit"
-          class="flex-1 py-2 bg-health-500 text-white rounded-lg hover:bg-health-600 transition-colors"
+          class="flex-1 py-3 bg-health-green text-white font-medium rounded-lg hover:bg-health-green-dark transition-colors shadow-sm"
         >
           保存配置
         </button>
