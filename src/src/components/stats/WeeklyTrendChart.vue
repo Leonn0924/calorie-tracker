@@ -269,18 +269,25 @@ const calendarDays = computed(() => {
   return days
 })
 
-// 本月统计
+// 本月统计（只统计当前显示月份的数据）
 const monthStats = computed(() => {
-  const inDeficitDays = props.stats.filter(s => s.status === 'in_deficit').length
-  const nearLimitDays = props.stats.filter(s => s.status === 'near_limit').length
-  const overBudgetDays = props.stats.filter(s => s.status === 'over_budget').length
+  const year = displayMonth.value.getFullYear()
+  const month = displayMonth.value.getMonth() + 1
+  const monthPrefix = `${year}-${String(month).padStart(2, '0')}`
+
+  // 只统计当前月份的日期
+  const monthStatsData = props.stats.filter(s => s.date.startsWith(monthPrefix))
+
+  const inDeficitDays = monthStatsData.filter(s => s.status === 'in_deficit').length
+  const nearLimitDays = monthStatsData.filter(s => s.status === 'near_limit').length
+  const overBudgetDays = monthStatsData.filter(s => s.status === 'over_budget').length
 
   return {
     inDeficitDays,
     nearLimitDays,
     overBudgetDays,
-    totalDays: props.stats.length,
-    achievementRate: props.stats.length > 0 ? Math.round((inDeficitDays / props.stats.length) * 100) : 0,
+    totalDays: monthStatsData.length,
+    achievementRate: monthStatsData.length > 0 ? Math.round((inDeficitDays / monthStatsData.length) * 100) : 0,
   }
 })
 
