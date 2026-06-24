@@ -27,12 +27,21 @@
         </div>
       </div>
 
-      <!-- 餐别显示 -->
-      <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-        <span class="text-sm text-gray-600">餐别</span>
-        <div class="flex items-center gap-2">
-          <span class="text-lg">{{ mealIcon }}</span>
-          <span class="font-medium text-gray-800">{{ mealType }}</span>
+      <!-- 餐别选择 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">餐别</label>
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            type="button"
+            v-for="meal in mealOptions"
+            :key="meal.value"
+            @click="selectedMealType = meal.value"
+            :class="selectedMealType === meal.value ? 'bg-health-green text-white border-health-green' : 'bg-white text-gray-700 border-gray-300 hover:border-health-green'"
+            class="py-2 px-3 rounded-lg border-2 transition-colors flex items-center justify-center gap-1.5"
+          >
+            <span class="text-lg">{{ meal.icon }}</span>
+            <span class="text-sm font-medium">{{ meal.label }}</span>
+          </button>
         </div>
       </div>
 
@@ -53,7 +62,7 @@
       <button
         type="submit"
         :disabled="!kcalInput || kcalInput <= 0"
-        class="w-full py-3 bg-health-500 text-white font-medium rounded-lg hover:bg-health-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+        class="w-full py-3 bg-health-green text-white font-medium rounded-lg hover:bg-health-green-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
       >
         添加记录
       </button>
@@ -61,14 +70,14 @@
 
     <!-- 成功提示 -->
     <div v-if="showSuccess" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-      <span class="text-green-600">✅</span>
-      <span class="text-sm text-green-700">已记录 {{ lastRecord }} kcal（{{ mealType }}）</span>
+      <span class="text-green-600"></span>
+      <span class="text-sm text-green-700">已记录 {{ lastRecord }} kcal（{{ selectedMealType }}）</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useDailyStats } from '@/composables/useDailyStats'
 import { getToday, inferMealType } from '@/utils/date'
 
@@ -79,32 +88,28 @@ const note = ref('')
 const showSuccess = ref(false)
 const lastRecord = ref(0)
 
-// 根据当前时间自动判断餐别
-const mealType = computed(() => {
-  return inferMealType(new Date())
-})
+// 餐别选项
+const mealOptions = [
+  { value: '早餐' as const, label: '早餐', icon: '' },
+  { value: '午餐' as const, label: '午餐', icon: '️' },
+  { value: '晚餐' as const, label: '晚餐', icon: '🌙' },
+  { value: '加餐' as const, label: '加餐', icon: '' },
+]
 
-const mealIcon = computed(() => {
-  const icons: Record<string, string> = {
-    '早餐': '🌅',
-    '午餐': '️',
-    '晚餐': '🌙',
-    '加餐': '🍪',
-  }
-  return icons[mealType.value] || '🍽️'
-})
+// 默认根据当前时间自动判断餐别
+const selectedMealType = ref(inferMealType(new Date()))
 
 function handleSubmit() {
   if (!kcalInput.value || kcalInput.value <= 0) return
 
-  // 添加饮食记录（使用占位食物 ID）
+  // 添加饮食记录
   addMeal({
     date: getToday(),
-    mealType: mealType.value,
+    mealType: selectedMealType.value,
     foodId: 'manual-kcal',
     foodName: note.value ? `手动记录 (${note.value})` : '手动记录',
-    caloriesPer100g: kcalInput.value, // 这里用 kcal 值占位
-    grams: 1, // 占位，实际不需要
+    caloriesPer100g: kcalInput.value,
+    grams: 1,
     calories: kcalInput.value,
     source: 'manual',
   })
