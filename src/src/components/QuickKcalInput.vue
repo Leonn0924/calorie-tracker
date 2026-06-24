@@ -36,7 +36,7 @@
             :class="selectedMealType === meal.value ? 'bg-health-green text-white border-health-green' : 'bg-white text-gray-700 border-gray-300 hover:border-health-green'"
             class="py-2 px-3 rounded-lg border-2 transition-colors flex items-center justify-center gap-1.5"
           >
-            <span class="text-lg">{{ meal.icon }}</span>
+            <Icons :name="meal.icon" size="sm" class="text-current" />
             <span class="text-sm font-medium">{{ meal.label }}</span>
           </button>
         </div>
@@ -67,7 +67,7 @@
 
     <!-- 成功提示 -->
     <div v-if="showSuccess" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-      <span class="text-green-600"></span>
+      <Icons name="check-circle" size="md" class="text-green-600" />
       <span class="text-sm text-green-700">已记录 {{ lastRecord }} kcal（{{ selectedMealType }}）</span>
     </div>
   </div>
@@ -77,6 +77,7 @@
 import { ref } from 'vue'
 import { useDailyStats } from '@/composables/useDailyStats'
 import { getToday, inferMealType } from '@/utils/date'
+import Icons from '@/components/icons/Icons.vue'
 
 const { addMeal } = useDailyStats()
 
@@ -85,12 +86,12 @@ const note = ref('')
 const showSuccess = ref(false)
 const lastRecord = ref(0)
 
-// 餐别选项
+// 餐别选项（使用 Heroicons 图标名称）
 const mealOptions = [
-  { value: '早餐' as const, label: '早餐', icon: '' },
-  { value: '午餐' as const, label: '午餐', icon: '️' },
-  { value: '晚餐' as const, label: '晚餐', icon: '🌙' },
-  { value: '加餐' as const, label: '加餐', icon: '' },
+  { value: '早餐' as const, label: '早餐', icon: 'sun' },
+  { value: '午餐' as const, label: '午餐', icon: 'cloud-sun' },
+  { value: '晚餐' as const, label: '晚餐', icon: 'moon' },
+  { value: '加餐' as const, label: '加餐', icon: 'sparkles' },
 ]
 
 // 默认根据当前时间自动判断餐别
