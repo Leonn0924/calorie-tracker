@@ -38,10 +38,10 @@
           :key="cat.id"
           @click="selectedCategory = cat.value"
           :class="[
-            'px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
+            'px-4 py-1.5 rounded-full text-sm font-medium transition-colors border-2',
             selectedCategory === cat.value
-              ? 'bg-health-500 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-health-green text-white border-health-green'
+              : 'bg-white text-gray-600 border-gray-300 hover:border-health-green'
           ]"
         >
           {{ cat.label }}
