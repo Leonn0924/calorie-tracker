@@ -119,7 +119,7 @@
 
         <button
           @click="addRecord"
-          class="w-full mt-3 bg-health-600 text-white py-2 rounded-lg font-medium hover:bg-health-700 transition-colors"
+          class="w-full mt-3 bg-health-green text-white py-2 rounded-lg font-medium hover:bg-health-green-dark transition-colors"
         >
           添加记录
         </button>
