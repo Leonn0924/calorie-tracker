@@ -75,24 +75,24 @@
     <!-- 本月视图：日历热力图 -->
     <div v-else class="space-y-4">
       <!-- 月份导航 -->
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mb-3">
         <button
           @click="previousMonth"
-          class="px-3 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          class="px-2.5 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 transition-colors"
         >
           ← 上月
         </button>
-        <span class="font-medium text-gray-800">{{ currentMonthLabel }}</span>
+        <span class="font-medium text-gray-800 text-sm">{{ currentMonthLabel }}</span>
         <button
           @click="nextMonth"
-          class="px-3 py-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+          class="px-2.5 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 transition-colors"
         >
           下月 →
         </button>
       </div>
 
       <!-- 星期标题 -->
-      <div class="grid grid-cols-7 gap-2 text-center text-xs text-gray-500">
+      <div class="grid grid-cols-7 gap-1.5 text-center text-xs text-gray-500 mb-1.5">
         <div>一</div>
         <div>二</div>
         <div>三</div>
@@ -103,12 +103,12 @@
       </div>
 
       <!-- 日历网格 -->
-      <div class="grid grid-cols-7 gap-2">
+      <div class="grid grid-cols-7 gap-1.5">
         <div
           v-for="day in calendarDays"
           :key="day.date"
           :class="[
-            'aspect-square rounded-lg flex flex-col items-center justify-center p-2 transition-all',
+            'aspect-square rounded-lg flex flex-col items-center justify-center p-1.5 transition-all',
             day.isCurrentMonth ? 'cursor-pointer hover:scale-105' : 'opacity-30',
             getStatusClass(day.status)
           ]"
@@ -117,36 +117,36 @@
           <span class="text-xs font-medium" :class="day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'">
             {{ day.dayNumber }}
           </span>
-          <span v-if="day.isCurrentMonth && day.status" class="text-lg mt-1">
+          <span v-if="day.isCurrentMonth && day.status" class="text-sm mt-0.5">
             {{ getStatusIcon(day.status) }}
           </span>
         </div>
       </div>
 
       <!-- 统计信息 -->
-      <div class="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+      <div class="grid grid-cols-3 gap-4 pt-3 border-t border-gray-100">
         <div class="text-center">
           <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-3 h-3 rounded bg-green-500"></div>
+            <div class="w-2.5 h-2.5 rounded bg-green-500"></div>
             <span class="text-xs text-gray-600">达标</span>
           </div>
-          <div class="text-lg font-bold text-gray-800">{{ monthStats.inDeficitDays }}</div>
+          <div class="text-base font-bold text-gray-800">{{ monthStats.inDeficitDays }}</div>
           <div class="text-xs text-gray-500">天</div>
         </div>
         <div class="text-center">
           <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-3 h-3 rounded bg-yellow-500"></div>
+            <div class="w-2.5 h-2.5 rounded bg-yellow-500"></div>
             <span class="text-xs text-gray-600">接近</span>
           </div>
-          <div class="text-lg font-bold text-gray-800">{{ monthStats.nearLimitDays }}</div>
+          <div class="text-base font-bold text-gray-800">{{ monthStats.nearLimitDays }}</div>
           <div class="text-xs text-gray-500">天</div>
         </div>
         <div class="text-center">
           <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-3 h-3 rounded bg-red-500"></div>
+            <div class="w-2.5 h-2.5 rounded bg-red-500"></div>
             <span class="text-xs text-gray-600">超支</span>
           </div>
-          <div class="text-lg font-bold text-gray-800">{{ monthStats.overBudgetDays }}</div>
+          <div class="text-base font-bold text-gray-800">{{ monthStats.overBudgetDays }}</div>
           <div class="text-xs text-gray-500">天</div>
         </div>
       </div>
