@@ -2,10 +2,12 @@
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h1 class="text-2xl font-bold text-gray-900">数据统计</h1>
-      <div class="text-sm text-gray-500">最近 7 天</div>
+      <div class="text-sm text-gray-500">
+        {{ period === 'week' ? '最近 7 天' : '最近 30 天' }}
+      </div>
     </div>
 
-    <!-- 今日缺口 + 本周达成率 -->
+    <!-- 今日缺口 + 达成率 -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <TodayGapCard :gap="todayGap" />
       <AchievementRate :achievement="achievementRate" />
@@ -14,14 +16,19 @@
     <!-- 三餐热量分布 -->
     <MealDistributionChart :distribution="mealDistribution" />
 
-    <!-- 七日缺口趋势 -->
-    <WeeklyTrendChart :weekly-stats="weeklyStats" />
+    <!-- 缺口趋势（本周/本月切换） -->
+    <WeeklyTrendChart
+      :stats="currentPeriodStats"
+      :period="period"
+      @update:period="setPeriod"
+    />
 
-    <!-- 本周汇总 -->
+    <!-- 汇总卡片（本周/本月） -->
     <WeeklySummaryCard
-      :weekly-average-intake="weeklyAverageIntake"
-      :weekly-average-exercise="weeklyAverageExercise"
-      :weekly-average-deficit="weeklyAverageDeficit"
+      :period="period"
+      :average-intake="averageIntake"
+      :average-exercise="averageExercise"
+      :average-deficit="averageDeficit"
     />
   </div>
 </template>
@@ -35,12 +42,14 @@ import AchievementRate from '@/components/stats/AchievementRate.vue'
 import WeeklySummaryCard from '@/components/stats/WeeklySummaryCard.vue'
 
 const {
-  weeklyStats,
+  period,
+  currentPeriodStats,
   todayGap,
   mealDistribution,
   achievementRate,
-  weeklyAverageIntake,
-  weeklyAverageExercise,
-  weeklyAverageDeficit,
+  averageIntake,
+  averageExercise,
+  averageDeficit,
+  setPeriod,
 } = useStats()
 </script>

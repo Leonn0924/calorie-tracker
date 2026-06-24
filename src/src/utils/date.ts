@@ -94,6 +94,13 @@ export function getRecentDates(days: number): string[] {
 }
 
 /**
+ * 获取最近 N 天（别名）
+ */
+export function getRecentDays(days: number): string[] {
+  return getRecentDates(days)
+}
+
+/**
  * 格式化时间戳为时间字符串 (如：08:30)
  */
 export function formatTime(date: Date | string): string {

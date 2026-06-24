@@ -1,21 +1,41 @@
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { DeficitStatus } from '@/types'
 import { useDailyStats } from './useDailyStats'
 import { useSettings } from './useSettings'
-import { getRecentDates } from '@/utils/date'
+import { getRecentDates, getRecentDays } from '@/utils/date'
+
+type Period = 'week' | 'month'
 
 export function useStats() {
   const { dailyStats, getMealsByDate, getExercisesByDate } = useDailyStats()
   const { settings } = useSettings()
+
+  // 当前选择的周期（本周/本月）
+  const period = ref<Period>('week')
 
   // 最近 7 天的日期列表
   const recent7Days = computed(() => {
     return getRecentDates(7)
   })
 
-  // 最近 7 天的统计数据
-  const weeklyStats = computed(() => {
-    return recent7Days.value.map(date => {
+  // 最近 30 天的日期列表
+  const recent30Days = computed(() => {
+    return getRecentDates(30)
+  })
+
+  // 当前周期的日期列表
+  const currentPeriodDays = computed(() => {
+    return period.value === 'week' ? recent7Days.value : recent30Days.value
+  })
+
+  // 当前周期的天数
+  const currentPeriodTotalDays = computed(() => {
+    return period.value === 'week' ? 7 : 30
+  })
+
+  // 当前周期的统计数据
+  const currentPeriodStats = computed(() => {
+    return currentPeriodDays.value.map(date => {
       const meals = getMealsByDate(date)
       const exercises = getExercisesByDate(date)
       const totalIntake = meals.reduce((sum, meal) => sum + meal.calories, 0)
@@ -100,8 +120,8 @@ export function useStats() {
 
   // 达成率统计
   const achievementRate = computed(() => {
-    const inDeficitDays = weeklyStats.value.filter(day => day.status === 'in_deficit').length
-    const totalDays = 7
+    const inDeficitDays = currentPeriodStats.value.filter(day => day.status === 'in_deficit').length
+    const totalDays = currentPeriodTotalDays.value
     const rate = (inDeficitDays / totalDays) * 100
 
     return {
@@ -111,32 +131,40 @@ export function useStats() {
     }
   })
 
-  // 周平均摄入
-  const weeklyAverageIntake = computed(() => {
-    const totalIntake = weeklyStats.value.reduce((sum, day) => sum + day.intake, 0)
-    return Math.round(totalIntake / 7)
+  // 平均摄入
+  const averageIntake = computed(() => {
+    const totalIntake = currentPeriodStats.value.reduce((sum, day) => sum + day.intake, 0)
+    return Math.round(totalIntake / currentPeriodTotalDays.value)
   })
 
-  // 周平均消耗
-  const weeklyAverageExercise = computed(() => {
-    const totalExercise = weeklyStats.value.reduce((sum, day) => sum + day.exercise, 0)
-    return Math.round(totalExercise / 7)
+  // 平均消耗
+  const averageExercise = computed(() => {
+    const totalExercise = currentPeriodStats.value.reduce((sum, day) => sum + day.exercise, 0)
+    return Math.round(totalExercise / currentPeriodTotalDays.value)
   })
 
-  // 周平均净缺口
-  const weeklyAverageDeficit = computed(() => {
-    const totalDeficit = weeklyStats.value.reduce((sum, day) => sum + day.netDeficit, 0)
-    return Math.round(totalDeficit / 7)
+  // 平均净缺口
+  const averageDeficit = computed(() => {
+    const totalDeficit = currentPeriodStats.value.reduce((sum, day) => sum + day.netDeficit, 0)
+    return Math.round(totalDeficit / currentPeriodTotalDays.value)
   })
+
+  // 切换周期
+  function setPeriod(newPeriod: Period) {
+    period.value = newPeriod
+  }
 
   return {
-    recent7Days,
-    weeklyStats,
+    period,
+    currentPeriodDays,
+    currentPeriodStats,
+    currentPeriodTotalDays,
     todayGap,
     mealDistribution,
     achievementRate,
-    weeklyAverageIntake,
-    weeklyAverageExercise,
-    weeklyAverageDeficit,
+    averageIntake,
+    averageExercise,
+    averageDeficit,
+    setPeriod,
   }
 }

@@ -1,15 +1,35 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h3 class="text-lg font-semibold text-gray-800 mb-4">七日缺口趋势</h3>
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">缺口趋势</h3>
 
-    <div class="space-y-3">
+      <!-- 周期切换按钮 -->
+      <div class="flex bg-gray-100 rounded-lg p-1">
+        <button
+          @click="$emit('update:period', 'week')"
+          :class="period === 'week' ? 'bg-health-green text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
+          class="px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+        >
+          本周
+        </button>
+        <button
+          @click="$emit('update:period', 'month')"
+          :class="period === 'month' ? 'bg-health-green text-white shadow-sm' : 'text-gray-600 hover:text-gray-800'"
+          class="px-3 py-1.5 rounded-md text-sm font-medium transition-all"
+        >
+          本月
+        </button>
+      </div>
+    </div>
+
+    <div class="space-y-3 max-h-96 overflow-y-auto">
       <div
-        v-for="day in weeklyStats"
+        v-for="day in stats"
         :key="day.date"
         class="flex items-center gap-3"
       >
         <!-- 日期 -->
-        <div class="w-12 text-sm text-gray-500">{{ formatDate(day.date) }}</div>
+        <div class="w-20 text-sm text-gray-500">{{ formatDate(day.date) }}</div>
 
         <!-- 柱状图 -->
         <div class="flex-1 flex items-center gap-2">
@@ -78,7 +98,9 @@ import { computed } from 'vue'
 import type { DeficitStatus } from '@/types'
 import { formatDate } from '@/utils/date'
 
-interface WeeklyStat {
+type Period = 'week' | 'month'
+
+interface Stat {
   date: string
   budget: number
   intake: number
@@ -88,13 +110,18 @@ interface WeeklyStat {
 }
 
 const props = defineProps<{
-  weeklyStats: WeeklyStat[]
+  stats: Stat[]
+  period: Period
+}>()
+
+defineEmits<{
+  'update:period': [value: Period]
 }>()
 
 const maxCalories = computed(() => {
-  const maxIntake = Math.max(...props.weeklyStats.map(d => d.intake))
-  const maxBudget = Math.max(...props.weeklyStats.map(d => d.budget))
-  return Math.max(maxIntake, maxBudget) * 1.2 // 留出 20% 空间
+  const maxIntake = Math.max(...props.stats.map(d => d.intake))
+  const maxBudget = Math.max(...props.stats.map(d => d.budget))
+  return Math.max(maxIntake, maxBudget) * 1.2
 })
 
 function getBarClass(status: DeficitStatus) {
