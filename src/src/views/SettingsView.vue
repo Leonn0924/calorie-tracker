@@ -19,6 +19,9 @@
 
     <!-- 体重记录 -->
     <WeightTracker />
+
+    <!-- 数据导出/导入 -->
+    <DataExportImport />
   </div>
 </template>
 
@@ -31,6 +34,7 @@ import GoalSettings from '@/components/settings/GoalSettings.vue'
 import EstimateModeSelector from '@/components/settings/EstimateModeSelector.vue'
 import APIConfig from '@/components/settings/APIConfig.vue'
 import WeightTracker from '@/components/settings/WeightTracker.vue'
+import DataExportImport from '@/components/settings/DataExportImport.vue'
 
 const { settings } = useSettings()
 const estimateMode = ref<EstimateMode>(settings.value.estimateMode || 'rule')
