@@ -1,15 +1,5 @@
 <template>
   <div class="space-y-6">
-    <!-- 今日概览 -->
-    <TodaySummary
-      :budget="dailyStats.budget"
-      :intake="dailyStats.intake"
-      :exercise="dailyStats.exercise"
-      :netDeficit="dailyStats.netDeficit"
-      :tdee="settings.tdee"
-      :status="dailyStats.status"
-    />
-
     <!-- AI 智能估算 -->
     <AIInput @confirm="handleAIConfirm" />
 
@@ -44,7 +34,6 @@ import { ref } from 'vue'
 import type { AIEstimateItem, MealType, FoodItem, MealRecord } from '@/types'
 import { useDailyStats } from '@/composables/useDailyStats'
 import { useSettings } from '@/composables/useSettings'
-import TodaySummary from '@/components/TodaySummary.vue'
 import AIInput from '@/components/AIInput.vue'
 import QuickRecord from '@/components/QuickRecord.vue'
 import QuickKcalInput from '@/components/QuickKcalInput.vue'
