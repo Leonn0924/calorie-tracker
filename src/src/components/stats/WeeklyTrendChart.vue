@@ -75,24 +75,24 @@
     <!-- 本月视图：日历热力图 -->
     <div v-else class="space-y-4">
       <!-- 月份导航 -->
-      <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center justify-between mb-2">
         <button
           @click="previousMonth"
-          class="px-2.5 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 transition-colors"
+          class="px-2 py-0.5 rounded text-xs border border-gray-300 hover:bg-gray-50 transition-colors"
         >
           ← 上月
         </button>
         <span class="font-medium text-gray-800 text-sm">{{ currentMonthLabel }}</span>
         <button
           @click="nextMonth"
-          class="px-2.5 py-1 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 transition-colors"
+          class="px-2 py-0.5 rounded text-xs border border-gray-300 hover:bg-gray-50 transition-colors"
         >
           下月 →
         </button>
       </div>
 
       <!-- 星期标题 -->
-      <div class="grid grid-cols-7 gap-1.5 text-center text-xs text-gray-500 mb-1.5">
+      <div class="grid grid-cols-7 gap-1 text-center text-[10px] text-gray-500 mb-1">
         <div>一</div>
         <div>二</div>
         <div>三</div>
@@ -103,51 +103,48 @@
       </div>
 
       <!-- 日历网格 -->
-      <div class="grid grid-cols-7 gap-1.5">
+      <div class="grid grid-cols-7 gap-1">
         <div
           v-for="day in calendarDays"
           :key="day.date"
           :class="[
-            'aspect-square rounded-lg flex flex-col items-center justify-center p-1.5 transition-all',
-            day.isCurrentMonth ? 'cursor-pointer hover:scale-105' : 'opacity-30',
+            'aspect-square rounded flex flex-col items-center justify-center transition-all',
+            day.isCurrentMonth ? 'cursor-pointer hover:scale-110' : 'opacity-30',
             getStatusClass(day.status)
           ]"
           :title="day.date ? `${formatDate(day.date)}: ${getStatusLabel(day.status)}` : ''"
         >
-          <span class="text-xs font-medium" :class="day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'">
+          <span class="text-[10px] font-medium leading-tight" :class="day.isCurrentMonth ? 'text-gray-800' : 'text-gray-400'">
             {{ day.dayNumber }}
           </span>
-          <span v-if="day.isCurrentMonth && day.status" class="text-sm mt-0.5">
+          <span v-if="day.isCurrentMonth && day.status" class="text-xs leading-tight">
             {{ getStatusIcon(day.status) }}
           </span>
         </div>
       </div>
 
       <!-- 统计信息 -->
-      <div class="grid grid-cols-3 gap-4 pt-3 border-t border-gray-100">
+      <div class="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100 text-xs">
         <div class="text-center">
-          <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-2.5 h-2.5 rounded bg-green-500"></div>
-            <span class="text-xs text-gray-600">达标</span>
+          <div class="flex items-center justify-center gap-1">
+            <div class="w-2 h-2 rounded bg-green-500"></div>
+            <span class="text-gray-600">达标</span>
           </div>
-          <div class="text-base font-bold text-gray-800">{{ monthStats.inDeficitDays }}</div>
-          <div class="text-xs text-gray-500">天</div>
+          <div class="font-bold text-gray-800">{{ monthStats.inDeficitDays }}天</div>
         </div>
         <div class="text-center">
-          <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-2.5 h-2.5 rounded bg-yellow-500"></div>
-            <span class="text-xs text-gray-600">接近</span>
+          <div class="flex items-center justify-center gap-1">
+            <div class="w-2 h-2 rounded bg-yellow-500"></div>
+            <span class="text-gray-600">接近</span>
           </div>
-          <div class="text-base font-bold text-gray-800">{{ monthStats.nearLimitDays }}</div>
-          <div class="text-xs text-gray-500">天</div>
+          <div class="font-bold text-gray-800">{{ monthStats.nearLimitDays }}天</div>
         </div>
         <div class="text-center">
-          <div class="flex items-center justify-center gap-1 mb-1">
-            <div class="w-2.5 h-2.5 rounded bg-red-500"></div>
-            <span class="text-xs text-gray-600">超支</span>
+          <div class="flex items-center justify-center gap-1">
+            <div class="w-2 h-2 rounded bg-red-500"></div>
+            <span class="text-gray-600">超支</span>
           </div>
-          <div class="text-base font-bold text-gray-800">{{ monthStats.overBudgetDays }}</div>
-          <div class="text-xs text-gray-500">天</div>
+          <div class="font-bold text-gray-800">{{ monthStats.overBudgetDays }}天</div>
         </div>
       </div>
     </div>
