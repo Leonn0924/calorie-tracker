@@ -5,26 +5,26 @@
     <div class="grid grid-cols-2 gap-4">
       <div>
         <div class="text-sm text-gray-500 mb-1">预算</div>
-        <div class="text-2xl font-bold text-gray-800">{{ gap.budget }}</div>
+        <div class="text-2xl font-bold text-gray-800">{{ gap.budget.toFixed(2) }}</div>
         <div class="text-xs text-gray-400">千卡</div>
       </div>
 
       <div>
         <div class="text-sm text-gray-500 mb-1">已摄入</div>
-        <div class="text-2xl font-bold text-orange-500">{{ gap.intake }}</div>
+        <div class="text-2xl font-bold text-orange-500">{{ gap.intake.toFixed(2) }}</div>
         <div class="text-xs text-gray-400">千卡</div>
       </div>
 
       <div>
         <div class="text-sm text-gray-500 mb-1">运动消耗</div>
-        <div class="text-2xl font-bold text-blue-500">+{{ gap.exercise }}</div>
+        <div class="text-2xl font-bold text-blue-500">+{{ gap.exercise.toFixed(2) }}</div>
         <div class="text-xs text-gray-400">千卡</div>
       </div>
 
       <div>
         <div class="text-sm text-gray-500 mb-1">净缺口</div>
         <div class="text-2xl font-bold" :class="deficitColor">
-          {{ gap.netDeficit > 0 ? '+' : '' }}{{ gap.netDeficit }}
+          {{ gap.netDeficit > 0 ? '+' : '' }}{{ Math.abs(gap.netDeficit).toFixed(2) }}
         </div>
         <div class="text-xs text-gray-400">千卡</div>
       </div>
