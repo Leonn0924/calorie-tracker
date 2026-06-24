@@ -12,7 +12,7 @@
       <div v-for="section in mealSections" :key="section.type">
         <div class="flex items-center justify-between mb-3">
           <h4 class="font-medium text-gray-700 flex items-center gap-2">
-            <span class="text-lg">{{ section.icon }}</span>
+            <Icons :name="section.icon" size="sm" class="text-gray-500" />
             {{ section.label }}
           </h4>
           <span class="text-sm font-semibold" :class="section.caloriesColor">
@@ -78,6 +78,7 @@
 import { computed } from 'vue'
 import type { MealRecord, MealType } from '@/types'
 import { getFoodById } from '@/data/foods'
+import Icons from '@/components/icons/Icons.vue'
 
 const props = defineProps<{
   records: MealRecord[]
@@ -91,10 +92,10 @@ defineEmits<{
 }>()
 
 const mealTypes: { type: MealType; label: string; icon: string }[] = [
-  { type: '早餐', label: '早餐', icon: '🌅' },
-  { type: '午餐', label: '午餐', icon: '☀️' },
-  { type: '晚餐', label: '晚餐', icon: '🌙' },
-  { type: '加餐', label: '加餐', icon: '🍪' },
+  { type: '早餐', label: '早餐', icon: 'sun' },
+  { type: '午餐', label: '午餐', icon: 'cloud-sun' },
+  { type: '晚餐', label: '晚餐', icon: 'moon' },
+  { type: '加餐', label: '加餐', icon: 'sparkles' },
 ]
 
 const mealSections = computed(() => {
