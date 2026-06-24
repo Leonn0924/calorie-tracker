@@ -89,7 +89,7 @@
         class="w-full py-4 bg-gradient-to-r from-health-500 to-health-600 text-white font-bold text-lg rounded-lg hover:from-health-600 hover:to-health-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
       >
         <span v-if="calculatedCalories > 0">
-          ✅ 添加到记录（{{ calculatedCalories }} kcal）
+          <svg class='w-5 h-5 inline-block mr-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/></svg> 添加到记录（{{ calculatedCalories }} kcal）
         </span>
         <span v-else>
           请填写完整信息
@@ -99,7 +99,7 @@
 
     <!-- 成功提示 -->
     <div v-if="showSuccess" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
-      <span class="text-green-600">✅</span>
+      <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       <span class="text-sm text-green-700">
         已记录 {{ foodName }} {{ grams }}g（{{ calculatedCalories }} kcal）
       </span>
@@ -127,12 +127,12 @@ const mealType = computed(() => {
 
 const mealIcon = computed(() => {
   const icons: Record<string, string> = {
-    '早餐': '🌅',
-    '午餐': '☀️',
-    '晚餐': '🌙',
-    '加餐': '🍪',
+    '早餐': 'sun',
+    '午餐': 'cloud-sun',
+    '晚餐': 'moon',
+    '加餐': 'sparkles',
   }
-  return icons[mealType.value] || '🍽️'
+  return icons[mealType.value] || 'clipboard'
 })
 
 // 实时计算总热量
