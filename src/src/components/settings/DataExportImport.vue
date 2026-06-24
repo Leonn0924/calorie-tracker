@@ -77,8 +77,8 @@
     <!-- 成功/错误提示 -->
     <div v-if="message" class="mt-4 p-3 rounded-lg" :class="message.type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
       <div class="flex items-center gap-2">
-        <span v-if="message.type === 'success'" class="text-green-600">✅</span>
-        <span v-else class="text-red-600">❌</span>
+        <Icons v-if="message.type === 'success'" name="check-circle" size="md" class="text-green-600" />
+        <Icons v-else name="x-circle" size="md" class="text-red-600" />
         <span class="text-sm" :class="message.type === 'success' ? 'text-green-700' : 'text-red-700'">
           {{ message.text }}
         </span>
@@ -90,6 +90,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { storage } from '@/utils/storage'
+import Icons from '@/components/icons/Icons.vue'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
