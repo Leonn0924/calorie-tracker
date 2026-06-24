@@ -127,7 +127,7 @@
     <div class="fixed bottom-20 right-6 md:bottom-6 md:right-6">
       <button
         @click="showAddFoodDialog = true"
-        class="w-14 h-14 bg-health-500 text-white rounded-full shadow-lg hover:bg-health-600 transition-colors flex items-center justify-center"
+        class="w-14 h-14 bg-health-green text-white rounded-full shadow-lg hover:bg-health-green-dark transition-colors flex items-center justify-center"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
