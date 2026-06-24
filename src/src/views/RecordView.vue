@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
-    <!-- AI 智能估算 -->
-    <AIInput @confirm="handleAIConfirm" />
+    <!-- AI 智能估算（V1 版本隐藏） -->
+    <!-- <AIInput @confirm="handleAIConfirm" /> -->
 
     <!-- 快捷记录 -->
     <QuickRecord
@@ -31,10 +31,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AIEstimateItem, MealType, FoodItem, MealRecord } from '@/types'
+import type { MealType, FoodItem, MealRecord } from '@/types'
 import { useDailyStats } from '@/composables/useDailyStats'
 import { useSettings } from '@/composables/useSettings'
-import AIInput from '@/components/AIInput.vue'
+// AI 智能估算（V1 版本隐藏）
+// import AIInput from '@/components/AIInput.vue'
 import QuickRecord from '@/components/QuickRecord.vue'
 import QuickKcalInput from '@/components/QuickKcalInput.vue'
 import CalorieCalculator from '@/components/CalorieCalculator.vue'
@@ -46,23 +47,22 @@ const { settings } = useSettings()
 
 const showCustomFoodDialog = ref(false)
 
-function handleAIConfirm(items: AIEstimateItem[], mealType: string) {
-  // 将 AI 估算结果添加到记录
-  items.forEach(item => {
-    // TODO: 需要创建 FoodItem 或从食物库查找
-    addMeal({
-      date: new Date().toISOString().split('T')[0],
-      mealType: mealType as MealType,
-      foodId: 'ai-' + Date.now() + Math.random(),
-      foodName: item.foodName,
-      caloriesPer100g: Math.round(item.calories / item.grams * 100),
-      grams: item.grams,
-      source: 'ai',
-      confidence: item.confidence,
-      rawInput: item.note,
-    })
-  })
-}
+// AI 智能估算确认（V1 版本隐藏）
+// function handleAIConfirm(items: AIEstimateItem[], mealType: string) {
+//   items.forEach(item => {
+//     addMeal({
+//       date: new Date().toISOString().split('T')[0],
+//       mealType: mealType as MealType,
+//       foodId: 'ai-' + Date.now() + Math.random(),
+//       foodName: item.foodName,
+//       caloriesPer100g: Math.round(item.calories / item.grams * 100),
+//       grams: item.grams,
+//       source: 'ai',
+//       confidence: item.confidence,
+//       rawInput: item.note,
+//     })
+//   })
+// }
 
 function handleQuickAdd(food: FoodItem, grams: number, mealType: MealType) {
   addMeal({
