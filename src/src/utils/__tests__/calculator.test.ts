@@ -74,16 +74,16 @@ describe('Calculator Utils', () => {
   describe('calculateDailyBudget', () => {
     it('should calculate daily budget correctly', () => {
       const tdee = 2500
-      const deficit = -400
+      const deficit = -400  // 减脂缺口（负数）
       const budget = calculateDailyBudget(tdee, deficit)
-      expect(budget).toBe(2900) // 2500 - (-400) = 2900
+      expect(budget).toBe(2100) // 2500 + (-400) = 2100
     })
 
     it('should handle positive deficit (surplus)', () => {
       const tdee = 2500
-      const deficit = 300
+      const deficit = 300  // 增重盈余（正数）
       const budget = calculateDailyBudget(tdee, deficit)
-      expect(budget).toBe(2200)
+      expect(budget).toBe(2800) // 2500 + 300 = 2800
     })
   })
 

@@ -62,11 +62,14 @@ export function calculateTargetDeficit(
 /**
  * 计算每日饮食预算
  * @param tdee 每日总消耗
- * @param targetDeficit 目标缺口
+ * @param targetDeficit 目标缺口（负数表示减脂，正数表示增重）
  * @returns 每日预算 (千卡)
  */
 export function calculateDailyBudget(tdee: number, targetDeficit: number): number {
-  return tdee - targetDeficit
+  // 预算 = TDEE + 目标缺口
+  // 减脂时缺口为负：预算 = TDEE + (-500) = TDEE - 500
+  // 增重时缺口为正：预算 = TDEE + 300
+  return tdee + targetDeficit
 }
 
 /**
