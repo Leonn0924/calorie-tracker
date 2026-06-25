@@ -16,32 +16,38 @@
 
       <!-- 扫码区域 -->
       <div class="p-4">
-        <!-- 摄像头容器 -->
+        <!-- 初始状态：显示拍照按钮 -->
         <div v-if="!scanning && !result" class="relative">
           <div class="bg-gray-100 rounded-lg p-8 text-center">
-            <Icons name="barcode" size="xl" class="text-gray-400 mx-auto mb-3" />
-            <p class="text-sm text-gray-600 mb-4">将条形码对准摄像头</p>
+            <Icons name="camera" size="xl" class="text-gray-400 mx-auto mb-3" />
+            <p class="text-sm text-gray-600 mb-4">对准条形码后拍照</p>
             <button
-              @click="startScanning"
-              class="px-6 py-2 bg-health-green text-white rounded-lg hover:bg-health-green-dark transition-colors"
+              @click="takePhoto"
+              :disabled="cameraLoading"
+              class="px-6 py-2 bg-health-green text-white rounded-lg hover:bg-health-green-dark transition-colors disabled:opacity-50"
             >
-              开始扫码
+              {{ cameraLoading ? '准备中...' : '拍照识别' }}
             </button>
           </div>
         </div>
 
-        <!-- 扫码中 -->
+        <!-- 拍照预览 -->
         <div v-else-if="scanning && !result" class="relative">
           <video ref="videoElement" class="w-full rounded-lg"></video>
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div class="w-64 h-32 border-2 border-health-green rounded-lg animate-pulse"></div>
+          <div class="mt-3 flex gap-2">
+            <button
+              @click="cancelPhoto"
+              class="flex-1 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              取消
+            </button>
+            <button
+              @click="captureAndScan"
+              class="flex-1 py-2 bg-health-green text-white rounded-lg hover:bg-health-green-dark transition-colors"
+            >
+              确认识别
+            </button>
           </div>
-          <button
-            @click="stopScanning"
-            class="mt-3 w-full py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            取消
-          </button>
         </div>
 
         <!-- 扫码结果 -->
@@ -102,7 +108,7 @@
               @click="resetScanner"
               class="flex-1 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              重新扫码
+              重新拍照
             </button>
             <button
               @click="addFood"
@@ -120,14 +126,14 @@
             <div>
               <h4 class="font-medium text-red-800">未找到该食品</h4>
               <p class="text-sm text-red-700 mt-1">条形码：{{ error }}</p>
-              <p class="text-xs text-red-600 mt-2">请尝试手动输入或扫描其他食品</p>
+              <p class="text-xs text-red-600 mt-2">请尝试拍照其他食品或手动输入</p>
             </div>
           </div>
           <button
             @click="resetScanner"
             class="mt-3 w-full py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            重新扫码
+            重新拍照
           </button>
         </div>
       </div>
@@ -157,6 +163,7 @@ const emit = defineEmits<{
 
 const videoElement = ref<HTMLVideoElement | null>(null)
 const scanning = ref(false)
+const cameraLoading = ref(false)
 const result = ref<{
   name: string
   brand: string
@@ -170,6 +177,7 @@ const error = ref<string | null>(null)
 const servingSize = ref(100)
 
 let codeReader: BrowserMultiFormatReader | null = null
+let stream: MediaStream | null = null
 
 // 计算总热量
 const calculatedCalories = computed(() => {
@@ -177,61 +185,92 @@ const calculatedCalories = computed(() => {
   return Math.round((result.value.calories * servingSize.value) / 100)
 })
 
-// 开始扫码
-async function startScanning() {
-  scanning.value = true
+// 拍照（启动摄像头）
+async function takePhoto() {
+  cameraLoading.value = true
   error.value = null
 
   try {
     codeReader = new BrowserMultiFormatReader()
 
-    // 获取摄像头权限并启动
-    const stream = await navigator.mediaDevices.getUserMedia({
+    // 获取摄像头权限
+    stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: 'environment' }
     })
 
     if (videoElement.value) {
       videoElement.value.srcObject = stream
       await videoElement.value.play()
-
-      // 持续监听扫码结果
-      codeReader.decodeFromVideoElement(videoElement.value)
-        .then((result: any) => {
-          if (result) {
-            const barcode = typeof result.getText === 'function' ? result.getText() : result.text
-            if (barcode) {
-              handleBarcodeScanned(barcode)
-            }
-          }
-        })
-        .catch((err: any) => {
-          console.error('扫码错误:', err)
-          // 忽略正常停止的错误
-          if (scanning.value) {
-            error.value = '扫码失败，请重试'
-          }
-        })
+      scanning.value = true
     }
   } catch (err) {
     console.error('摄像头启动失败:', err)
     error.value = '无法访问摄像头'
+  } finally {
+    cameraLoading.value = false
+  }
+}
+
+// 取消拍照
+function cancelPhoto() {
+  stopCamera()
+  scanning.value = false
+}
+
+// 拍照并识别
+async function captureAndScan() {
+  if (!videoElement.value) return
+
+  try {
+    // 从视频中捕获当前帧
+    const canvas = document.createElement('canvas')
+    canvas.width = videoElement.value.videoWidth
+    canvas.height = videoElement.value.videoHeight
+    const ctx = canvas.getContext('2d')
+    if (ctx) {
+      ctx.drawImage(videoElement.value, 0, 0)
+
+      // 识别条形码
+      if (codeReader) {
+        const result = await codeReader.decodeFromImage(canvas as any)
+        if (result) {
+          const barcode = typeof result.getText === 'function' ? result.getText() : (result as any).text
+          if (barcode) {
+            await handleBarcodeScanned(barcode)
+            return
+          }
+        }
+      }
+    }
+
+    // 识别失败
+    error.value = '未识别到条形码'
+    stopCamera()
+    scanning.value = false
+  } catch (err) {
+    console.error('识别失败:', err)
+    error.value = '识别失败，请重试'
+    stopCamera()
     scanning.value = false
   }
 }
 
-// 停止扫码
-function stopScanning() {
+// 停止摄像头
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop())
+    stream = null
+  }
   if (codeReader) {
     codeReader.reset()
     codeReader = null
   }
-  scanning.value = false
 }
 
 // 处理条形码
 async function handleBarcodeScanned(barcode: string) {
   console.log('扫描到条形码:', barcode)
-  stopScanning()
+  stopCamera()
 
   try {
     // 查询 OpenFoodFacts API
@@ -269,7 +308,8 @@ function resetScanner() {
   result.value = null
   error.value = null
   servingSize.value = 100
-  startScanning()
+  scanning.value = false
+  takePhoto()
 }
 
 // 添加食物到记录
