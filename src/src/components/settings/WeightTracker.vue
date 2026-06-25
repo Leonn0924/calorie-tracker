@@ -75,9 +75,12 @@
           :key="record.id"
           class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
         >
-          <div>
-            <div class="text-sm font-medium text-gray-800">{{ formatDate(record.date) }}</div>
-            <div class="text-xs text-gray-500">{{ record.weight }} kg</div>
+          <div class="flex items-center gap-3">
+            <Icons name="calendar" size="md" class="text-gray-400" />
+            <div>
+              <div class="text-sm font-medium text-gray-800 whitespace-nowrap">{{ formatShortDate(record.date) }}</div>
+              <div class="text-xs text-gray-500">{{ record.weight }} kg</div>
+            </div>
           </div>
           <button
             @click="handleRemoveWeight(record.id)"
@@ -101,7 +104,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useWeight } from '@/composables/useWeight'
-import { getToday, formatDate } from '@/utils/date'
+import { getToday } from '@/utils/date'
+import Icons from '@/components/icons/Icons.vue'
 
 const { sortedWeights, addWeight, removeWeight, getWeightChange, clearAllWeights } = useWeight()
 
@@ -109,6 +113,12 @@ const newWeightDate = ref(getToday())
 const newWeightValue = ref<number>(70)
 
 const weightChange = computed(() => getWeightChange())
+
+// 简短日期格式（防止换行）
+function formatShortDate(dateStr: string) {
+  const date = new Date(dateStr)
+  return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`
+}
 
 function handleAddWeight() {
   if (newWeightValue.value && newWeightDate.value) {
