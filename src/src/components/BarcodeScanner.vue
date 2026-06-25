@@ -194,11 +194,23 @@ async function startScanning() {
       videoElement.value.srcObject = stream
       await videoElement.value.play()
 
-      // 开始识别
-      const result = await codeReader.decodeFromVideoElement(videoElement.value)
-      if (result) {
-        handleBarcodeScanned(result.getText())
-      }
+      // 持续监听扫码结果
+      codeReader.decodeFromVideoElement(videoElement.value)
+        .then((result: any) => {
+          if (result) {
+            const barcode = typeof result.getText === 'function' ? result.getText() : result.text
+            if (barcode) {
+              handleBarcodeScanned(barcode)
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.error('扫码错误:', err)
+          // 忽略正常停止的错误
+          if (scanning.value) {
+            error.value = '扫码失败，请重试'
+          }
+        })
     }
   } catch (err) {
     console.error('摄像头启动失败:', err)
@@ -218,6 +230,7 @@ function stopScanning() {
 
 // 处理条形码
 async function handleBarcodeScanned(barcode: string) {
+  console.log('扫描到条形码:', barcode)
   stopScanning()
 
   try {
@@ -226,6 +239,8 @@ async function handleBarcodeScanned(barcode: string) {
       `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
     )
     const data = await response.json()
+
+    console.log('API 返回数据:', data)
 
     if (data.product) {
       const product = data.product
@@ -238,8 +253,10 @@ async function handleBarcodeScanned(barcode: string) {
         carbs: product.nutriments?.carbohydrates_100g || 0,
         fat: product.nutriments?.fat_100g || 0,
       }
+      console.log('解析结果:', result.value)
     } else {
       error.value = barcode
+      console.log('未找到商品')
     }
   } catch (err) {
     console.error('查询失败:', err)
