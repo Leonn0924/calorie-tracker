@@ -30,7 +30,7 @@
         class="flex items-center gap-3"
       >
         <!-- 日期 -->
-        <div class="w-20 text-sm text-gray-500">{{ formatDate(day.date) }}</div>
+        <div class="w-20 text-sm text-gray-500">{{ formatDateMD(day.date) }}</div>
 
         <!-- 柱状图 -->
         <div class="flex-1 flex items-center gap-2">
@@ -112,7 +112,7 @@
             getStatusClass(day.status),
             day.isCurrentMonth ? 'hover:ring-2 hover:ring-health-green hover:ring-offset-1' : 'opacity-30'
           ]"
-          :title="day.date ? `${formatDate(day.date)}: ${getStatusLabel(day.status)}` : ''"
+          :title="day.date ? `${formatDateMD(day.date)}: ${getStatusLabel(day.status)}` : ''"
         >
           <div v-if="day.isCurrentMonth" class="h-full flex items-center justify-center">
             <span class="text-[10px] font-medium" :class="day.status ? 'text-white' : 'text-gray-400'">
@@ -167,7 +167,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { DeficitStatus } from '@/types'
-import { formatDate, getDaysInMonth, getFirstDayOfMonth } from '@/utils/date'
+import { formatDateMD, getDaysInMonth, getFirstDayOfMonth } from '@/utils/date'
 import Icons from '@/components/icons/Icons.vue'
 
 type Period = 'week' | 'month'

@@ -24,6 +24,14 @@ export function addDays(date: Date, days: number): Date {
 }
 
 /**
+ * 格式化日期为 MM-DD（不含年份）
+ */
+export function formatDateMD(date: Date | string): string {
+  const d = typeof date === 'string' ? parseISO(date) : date
+  return format(d, 'MM-dd')
+}
+
+/**
  * 格式化日期为中文显示 (如：6月23日)
  */
 export function formatDateDisplay(date: Date | string): string {

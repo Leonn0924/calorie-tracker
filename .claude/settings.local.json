@@ -22,7 +22,11 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(ssh-keygen *)",
-      "Bash(ssh *)"
+      "Bash(ssh *)",
+      "Bash(cat)",
+      "Bash(python /tmp/date_patch.py)",
+      "Bash(npx vue-tsc *)",
+      "Bash(npx vitest *)"
     ]
   }
 }
