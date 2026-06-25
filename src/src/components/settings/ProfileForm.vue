@@ -88,6 +88,38 @@
         </select>
       </div>
 
+      <!-- BMR 公式选择 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">BMR 计算公式</label>
+        <select
+          v-model="form.bmrFormula"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-health-500"
+        >
+          <option value="mifflin">Mifflin-St Jeor（默认，适合普通人）</option>
+          <option value="harris">Harris-Benedict（经典公式，适合健身人群）</option>
+          <option value="katch">Katch-McArdle（需要体脂率，最准确）</option>
+        </select>
+        <p class="mt-1 text-xs text-gray-500">{{ formulaDescription }}</p>
+      </div>
+
+      <!-- 体脂率（仅 Katch-McArdle 公式需要） -->
+      <div v-if="form.bmrFormula === 'katch'">
+        <label class="block text-sm font-medium text-gray-700 mb-2">体脂率 (%)</label>
+        <input
+          v-model.number="form.bodyFatPercentage"
+          type="number"
+          min="5"
+          max="60"
+          step="0.1"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-health-500"
+          placeholder="请输入体脂率"
+        />
+        <p class="mt-1 text-xs text-gray-500">
+          可通过体脂秤测量，或估算（男性 15-20%，女性 20-25%）
+        </p>
+      </div>
+
       <!-- 计算结果展示 -->
       <div class="grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
         <div class="text-center">
@@ -120,10 +152,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import type { BMRFormula } from '@/types'
 import { useSettings } from '@/composables/useSettings'
 import { calculateBMR, calculateTDEE, calculateDailyBudget } from '@/utils/calculator'
 
-const { settings, updateProfile } = useSettings()
+const { settings, updateProfile, updateBMRFormula } = useSettings()
 
 const form = ref({
   gender: settings.value.gender,
@@ -131,11 +164,30 @@ const form = ref({
   height: settings.value.height,
   weight: settings.value.weight,
   activityLevel: settings.value.activityLevel,
+  bmrFormula: settings.value.bmrFormula || 'mifflin',
+  bodyFatPercentage: settings.value.bodyFatPercentage || 20,
+})
+
+// 公式描述
+const formulaDescription = computed(() => {
+  const descriptions = {
+    mifflin: '国际公认最准确的公式，适合普通人群',
+    harris: '经典公式，健身人群常用，结果略高',
+    katch: '基于去脂体重计算，最准确，需要体脂率',
+  }
+  return descriptions[form.value.bmrFormula as keyof typeof descriptions]
 })
 
 // 实时计算 BMR
 const bmr = computed(() =>
-  calculateBMR(form.value.gender, form.value.weight, form.value.height, form.value.age)
+  calculateBMR(
+    form.value.gender,
+    form.value.weight,
+    form.value.height,
+    form.value.age,
+    form.value.bodyFatPercentage,
+    form.value.bmrFormula
+  )
 )
 
 // 实时计算 TDEE
@@ -154,6 +206,7 @@ function handleSubmit() {
     weight: form.value.weight,
     activityLevel: form.value.activityLevel,
   })
+  updateBMRFormula(form.value.bmrFormula as BMRFormula, form.value.bodyFatPercentage)
   alert('设置已保存')
 }
 </script>

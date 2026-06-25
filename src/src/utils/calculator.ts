@@ -12,14 +12,19 @@ const ACTIVITY_MULTIPLIERS: Record<ActivityLevel, number> = {
 }
 
 /**
- * 计算基础代谢率 (Mifflin-St Jeor 公式)
+ * BMR 公式类型
+ */
+export type BMRFormula = 'mifflin' | 'harris' | 'katch'
+
+/**
+ * 计算基础代谢率 - Mifflin-St Jeor 公式（默认，适合普通人）
  * @param gender 性别
  * @param weight 体重 (kg)
  * @param height 身高 (cm)
  * @param age 年龄
  * @returns BMR (千卡/天)
  */
-export function calculateBMR(
+export function calculateBMR_Mifflin(
   gender: 'male' | 'female',
   weight: number,
   height: number,
@@ -29,6 +34,74 @@ export function calculateBMR(
     return 10 * weight + 6.25 * height - 5 * age + 5
   } else {
     return 10 * weight + 6.25 * height - 5 * age - 161
+  }
+}
+
+/**
+ * 计算基础代谢率 - Harris-Benedict 公式（经典公式，适合健身人群）
+ * @param gender 性别
+ * @param weight 体重 (kg)
+ * @param height 身高 (cm)
+ * @param age 年龄
+ * @returns BMR (千卡/天)
+ */
+export function calculateBMR_HarrisBenedict(
+  gender: 'male' | 'female',
+  weight: number,
+  height: number,
+  age: number
+): number {
+  if (gender === 'male') {
+    return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+  } else {
+    return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+  }
+}
+
+/**
+ * 计算基础代谢率 - Katch-McArdle 公式（需要体脂率，最准确）
+ * @param weight 体重 (kg)
+ * @param bodyFatPercentage 体脂率 (0-100)
+ * @returns BMR (千卡/天)
+ */
+export function calculateBMR_KatchMcArdle(
+  weight: number,
+  bodyFatPercentage: number
+): number {
+  const leanMass = weight * (1 - bodyFatPercentage / 100)
+  return 370 + (21.6 * leanMass)
+}
+
+/**
+ * 计算基础代谢率（统一入口）
+ * @param gender 性别
+ * @param weight 体重 (kg)
+ * @param height 身高 (cm)
+ * @param age 年龄
+ * @param bodyFatPercentage 体脂率（可选，Katch-McArdle 公式需要）
+ * @param formula 公式类型（默认 mifflin）
+ * @returns BMR (千卡/天)
+ */
+export function calculateBMR(
+  gender: 'male' | 'female',
+  weight: number,
+  height: number,
+  age: number,
+  bodyFatPercentage?: number,
+  formula: BMRFormula = 'mifflin'
+): number {
+  switch (formula) {
+    case 'harris':
+      return calculateBMR_HarrisBenedict(gender, weight, height, age)
+    case 'katch':
+      if (!bodyFatPercentage) {
+        // 如果没有体脂率，降级使用 Mifflin 公式
+        return calculateBMR_Mifflin(gender, weight, height, age)
+      }
+      return calculateBMR_KatchMcArdle(weight, bodyFatPercentage)
+    case 'mifflin':
+    default:
+      return calculateBMR_Mifflin(gender, weight, height, age)
   }
 }
 

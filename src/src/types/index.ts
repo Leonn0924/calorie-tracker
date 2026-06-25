@@ -8,6 +8,7 @@ export type EstimateMode = 'rule' | 'llm' | 'hybrid'
 export type RecordSource = 'ai' | 'manual'
 export type Confidence = 'high' | 'medium' | 'low'
 export type ExerciseSource = 'preset' | 'custom'
+export type BMRFormula = 'mifflin' | 'harris' | 'katch'
 
 // 食物项
 export interface FoodItem {
@@ -58,6 +59,8 @@ export interface UserSettings {
   dailyBudget: number
   estimateMode?: EstimateMode
   llmConfig?: LLMConfig
+  bmrFormula?: BMRFormula
+  bodyFatPercentage?: number
 }
 
 // 大模型配置

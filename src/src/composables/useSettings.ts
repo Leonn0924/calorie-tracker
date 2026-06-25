@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import type { UserSettings, ActivityLevel, GoalMode, EstimateMode, LLMConfig } from '@/types'
+import type { UserSettings, ActivityLevel, GoalMode, EstimateMode, LLMConfig, BMRFormula } from '@/types'
 import { storage } from '@/utils/storage'
 import {
   calculateBMR,
@@ -38,12 +38,14 @@ export function useSettings() {
 
   // 监听设置变化并重新计算
   watch(settings, (newSettings) => {
-    // 计算 BMR
+    // 计算 BMR（支持多种公式）
     newSettings.bmr = calculateBMR(
       newSettings.gender,
       newSettings.weight,
       newSettings.height,
-      newSettings.age
+      newSettings.age,
+      newSettings.bodyFatPercentage,
+      newSettings.bmrFormula || 'mifflin'
     )
 
     // 计算 TDEE
@@ -109,6 +111,14 @@ export function useSettings() {
     settings.value.llmConfig = config
   }
 
+  // 更新 BMR 公式
+  function updateBMRFormula(formula: BMRFormula, bodyFatPercentage?: number) {
+    settings.value.bmrFormula = formula
+    if (bodyFatPercentage !== undefined) {
+      settings.value.bodyFatPercentage = bodyFatPercentage
+    }
+  }
+
   // 重置为默认设置
   function resetSettings() {
     settings.value = defaultSettings
@@ -123,6 +133,7 @@ export function useSettings() {
     updateActivityLevel,
     updateEstimateMode,
     updateLLMConfig,
+    updateBMRFormula,
     resetSettings,
   }
 }
