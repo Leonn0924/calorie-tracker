@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { GoalMode } from '@/types'
 import { useSettings } from '@/composables/useSettings'
 import { calculateTargetDeficit } from '@/utils/calculator'
@@ -144,6 +144,15 @@ const form = ref({
   targetWeight: settings.value.targetWeight || settings.value.weight,
   targetDays: settings.value.targetDays || 90,
   targetDeficit: settings.value.targetDeficit,
+})
+
+// 监听当前体重变化，自动调整目标体重
+watch(() => settings.value.weight, (newWeight) => {
+  // 如果目标体重和当前体重的差距小于 5kg，自动调整
+  const diff = form.value.targetWeight - (settings.value.targetWeight || settings.value.weight)
+  if (Math.abs(diff) < 5 || !settings.value.targetWeight) {
+    form.value.targetWeight = newWeight + diff
+  }
 })
 
 // 计算目标缺口
