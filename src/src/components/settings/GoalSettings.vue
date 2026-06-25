@@ -162,7 +162,6 @@ watch(() => settings.value.targetDays, (newTargetDays) => {
 // 监听当前体重变化，更新目标体重的默认值
 watch(() => settings.value.weight, (newWeight, oldWeight) => {
   // 如果之前没有设置过目标体重，或者目标体重等于旧体重，则自动更新
-  const oldTargetWeight = settings.value.targetWeight || oldWeight
   if (!settings.value.targetWeight || settings.value.targetWeight === oldWeight) {
     form.value.targetWeight = newWeight
   }
@@ -199,15 +198,13 @@ function handleSubmit() {
     form.value.goalMode === 'target' || form.value.goalMode === 'bulk' ? form.value.targetDays : undefined
   )
 
-  console.log('保存后的 settings:', settings.value)
-}
-
   // 如果是高级模式，直接保存缺口值
   if (form.value.goalMode === 'advanced') {
     // 这里需要更新 settings 中的 targetDeficit
     // 暂时简单处理
   }
 
+  console.log('保存后的 settings:', settings.value)
   alert('目标设置已保存')
 }
 </script>

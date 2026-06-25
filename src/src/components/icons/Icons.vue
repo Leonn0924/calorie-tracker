@@ -95,6 +95,9 @@
     <svg v-else-if="name === 'calendar'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
     </svg>
+    <svg v-else-if="name === 'barcode'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h2v14H3V5zm4 0h1v14H7V5zm2 0h3v14H9V5zm4 0h1v14h-1V5zm2 0h2v14h-2V5zm3 0h3v14h-3V5z"/>
+    </svg>
   </span>
 </template>
 

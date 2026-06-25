@@ -7,6 +7,17 @@
       快速记录
     </h3>
 
+    <!-- 扫码按钮 -->
+    <div class="mb-4">
+      <button
+        @click="showScanner = true"
+        class="w-full py-3 border-2 border-dashed border-health-green text-health-green-dark rounded-lg hover:bg-health-50 transition-colors flex items-center justify-center gap-2"
+      >
+        <Icons name="barcode" size="md" class="text-health-green" />
+        <span class="font-medium">扫码添加食物</span>
+      </button>
+    </div>
+
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <!-- kcal 输入 -->
       <div>
@@ -70,6 +81,13 @@
       <Icons name="check-circle" size="md" class="text-green-600" />
       <span class="text-sm text-green-700">已记录 {{ lastRecord }} kcal（{{ selectedMealType }}）</span>
     </div>
+
+    <!-- 扫码组件 -->
+    <BarcodeScanner
+      v-if="showScanner"
+      @close="showScanner = false"
+      @add="handleScanAdd"
+    />
   </div>
 </template>
 
@@ -78,9 +96,11 @@ import { ref } from 'vue'
 import { useDailyStats } from '@/composables/useDailyStats'
 import { getToday, inferMealType } from '@/utils/date'
 import Icons from '@/components/icons/Icons.vue'
+import BarcodeScanner from '@/components/BarcodeScanner.vue'
 
 const { addMeal } = useDailyStats()
 
+const showScanner = ref(false)
 const kcalInput = ref<number>(0)
 const note = ref('')
 const showSuccess = ref(false)
@@ -117,6 +137,40 @@ function handleSubmit() {
   showSuccess.value = true
   kcalInput.value = 0
   note.value = ''
+
+  // 3 秒后隐藏成功提示
+  setTimeout(() => {
+    showSuccess.value = false
+  }, 3000)
+}
+
+// 处理扫码添加食物
+function handleScanAdd(data: {
+  name: string
+  brand: string
+  barcode: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  servingSize: number
+  totalCalories: number
+}) {
+  addMeal({
+    date: getToday(),
+    mealType: selectedMealType.value,
+    foodId: `barcode-${data.barcode}`,
+    foodName: `${data.name} (${data.brand})`,
+    caloriesPer100g: data.calories,
+    grams: data.servingSize,
+    calories: data.totalCalories,
+    source: 'manual',
+    rawInput: `条形码：${data.barcode} | 蛋白质：${data.protein}g | 碳水：${data.carbs}g | 脂肪：${data.fat}g`,
+  })
+
+  // 显示成功提示
+  lastRecord.value = data.totalCalories
+  showSuccess.value = true
 
   // 3 秒后隐藏成功提示
   setTimeout(() => {
