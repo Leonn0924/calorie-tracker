@@ -146,13 +146,27 @@ const form = ref({
   targetDeficit: settings.value.targetDeficit,
 })
 
-// 监听当前体重变化，自动调整目标体重
-watch(() => settings.value.weight, (newWeight) => {
-  // 如果目标体重和当前体重的差距小于 5kg，自动调整
-  const diff = form.value.targetWeight - (settings.value.targetWeight || settings.value.weight)
-  if (Math.abs(diff) < 5 || !settings.value.targetWeight) {
-    form.value.targetWeight = newWeight + diff
+// 监听 settings 变化，同步到 form（防止数据不同步）
+watch(() => settings.value.targetWeight, (newTargetWeight) => {
+  if (newTargetWeight && newTargetWeight !== form.value.targetWeight) {
+    form.value.targetWeight = newTargetWeight
   }
+})
+
+watch(() => settings.value.targetDays, (newTargetDays) => {
+  if (newTargetDays && newTargetDays !== form.value.targetDays) {
+    form.value.targetDays = newTargetDays
+  }
+})
+
+// 监听当前体重变化，自动重新计算缺口
+// 注意：不修改 targetWeight，只让 useSettings 自动重新计算 targetDeficit
+watch(() => settings.value.weight, (newWeight, oldWeight) => {
+  // 当前体重变化时，保持目标体重不变
+  // useSettings 会自动重新计算 targetDeficit
+  console.log('当前体重变化:', oldWeight, '→', newWeight)
+  console.log('目标体重保持:', form.value.targetWeight)
+  console.log('新的缺口:', calculateTargetDeficit(newWeight, form.value.targetWeight, form.value.targetDays))
 })
 
 // 计算目标缺口
