@@ -5,6 +5,7 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  base: '/calorie-tracker/', // GitHub Pages 仓库名
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

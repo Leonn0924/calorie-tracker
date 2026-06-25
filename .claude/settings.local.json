@@ -18,7 +18,11 @@
       "Bash(rm src/components/CalorieCalculator.vue.bak)",
       "Bash(sed -i.bak \"s/'🍽️'/'clipboard'/g\" src/components/CalorieCalculator.vue)",
       "Bash(sed -i.bak -e 's/icon: '\\\\''🌅'\\\\''/icon: '\\\\''sun'\\\\''/g' -e 's/icon: '\\\\''☀️'\\\\''/icon: '\\\\''cloud-sun'\\\\''/g' -e 's/icon: '\\\\''🌙'\\\\''/icon: '\\\\''moon'\\\\''/g' -e 's/icon: '\\\\''🍪'\\\\''/icon: '\\\\''sparkles'\\\\''/g' src/components/MealSections.vue)",
-      "Bash(rm src/components/MealSections.vue.bak)"
+      "Bash(rm src/components/MealSections.vue.bak)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(ssh-keygen *)",
+      "Bash(ssh *)"
     ]
   }
 }
