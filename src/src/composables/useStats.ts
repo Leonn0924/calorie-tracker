@@ -2,7 +2,7 @@ import { computed, ref } from 'vue'
 import type { DeficitStatus } from '@/types'
 import { useDailyStats } from './useDailyStats'
 import { useSettings } from './useSettings'
-import { getRecentDates, getRecentDays } from '@/utils/date'
+import { getRecentDates } from '@/utils/date'
 
 type Period = 'week' | 'month'
 

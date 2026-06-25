@@ -13,7 +13,12 @@
       "Bash(curl -s http://localhost:5173/)",
       "Bash(npx playwright *)",
       "Bash(git commit *)",
-      "Bash(npm test *)"
+      "Bash(npm test *)",
+      "Bash(sed -i.bak -e 's/✅ 添加到记录/<svg class='\\\\''w-5 h-5 inline-block mr-1'\\\\'' fill='\\\\''none'\\\\'' stroke='\\\\''currentColor'\\\\'' viewBox='\\\\''0 0 24 24'\\\\''><path stroke-linecap='\\\\''round'\\\\'' stroke-linejoin='\\\\''round'\\\\'' stroke-width='\\\\''2'\\\\'' d='\\\\''M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'\\\\''\\\\/><\\\\/svg> 添加到记录/g' -e 's/<span class=\"text-green-600\">✅<\\\\/span>/<svg class=\"w-5 h-5 text-green-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z\"\\\\/><\\\\/svg>/g' -e 's/'\\\\''早餐'\\\\'': '\\\\''🌅'\\\\''/'\\\\''早餐'\\\\'': '\\\\''sun'\\\\''/g' -e 's/'\\\\''午餐'\\\\'': '\\\\''☀️'\\\\''/'\\\\''午餐'\\\\'': '\\\\''cloud-sun'\\\\''/g' -e 's/'\\\\''晚餐'\\\\'': '\\\\''🌙'\\\\''/'\\\\''晚餐'\\\\'': '\\\\''moon'\\\\''/g' -e 's/'\\\\''加餐'\\\\'': '\\\\''🍪'\\\\''/'\\\\''加餐'\\\\'': '\\\\''sparkles'\\\\''/g' src/components/CalorieCalculator.vue)",
+      "Bash(rm src/components/CalorieCalculator.vue.bak)",
+      "Bash(sed -i.bak \"s/'🍽️'/'clipboard'/g\" src/components/CalorieCalculator.vue)",
+      "Bash(sed -i.bak -e 's/icon: '\\\\''🌅'\\\\''/icon: '\\\\''sun'\\\\''/g' -e 's/icon: '\\\\''☀️'\\\\''/icon: '\\\\''cloud-sun'\\\\''/g' -e 's/icon: '\\\\''🌙'\\\\''/icon: '\\\\''moon'\\\\''/g' -e 's/icon: '\\\\''🍪'\\\\''/icon: '\\\\''sparkles'\\\\''/g' src/components/MealSections.vue)",
+      "Bash(rm src/components/MealSections.vue.bak)"
     ]
   }
 }

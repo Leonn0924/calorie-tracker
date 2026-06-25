@@ -32,7 +32,7 @@
           @change="handleFileSelect"
         />
         <button
-          @click="$refs.fileInput.click()"
+          @click="clickFileInput"
           class="px-4 py-2 bg-health-green text-white rounded-lg hover:bg-health-green-dark transition-colors"
         >
           选择文件导入
@@ -94,6 +94,11 @@ import Icons from '@/components/icons/Icons.vue'
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+
+// 点击文件选择按钮
+function clickFileInput() {
+  fileInput.value?.click()
+}
 
 // 数据统计
 const stats = computed(() => {

@@ -105,8 +105,8 @@
       <!-- 日历网格（极简色块风格） -->
       <div class="grid grid-cols-7 gap-1">
         <div
-          v-for="day in calendarDays"
-          :key="day.date"
+          v-for="(day, index) in calendarDays"
+          :key="index"
           :class="[
             'h-8 rounded-sm transition-all cursor-pointer',
             getStatusClass(day.status),
@@ -303,20 +303,6 @@ function getStatusClass(status: DeficitStatus | null) {
       return 'bg-red-500'
     default:
       return 'bg-gray-100'
-  }
-}
-
-function getStatusIconName(status: DeficitStatus | null) {
-  if (!status) return ''
-  switch (status) {
-    case 'in_deficit':
-      return 'check-circle'
-    case 'near_limit':
-      return 'exclamation-triangle'
-    case 'over_budget':
-      return 'x-circle'
-    default:
-      return ''
   }
 }
 
