@@ -24,9 +24,9 @@
           v-for="preset in exercisePresets"
           :key="preset.id"
           @click="selectPreset(preset)"
-          class="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-health-500 hover:bg-health-50 transition-all"
+          class="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-health-500 hover:bg-health-50 transition-all cursor-pointer"
         >
-          <span class="text-2xl mb-1">{{ preset.icon }}</span>
+          <Icons :name="preset.icon" size="lg" class="text-gray-600 mb-1" />
           <span class="text-xs text-gray-700">{{ preset.name }}</span>
         </button>
       </div>
@@ -35,8 +35,9 @@
     <!-- 运动输入表单 -->
     <div v-if="selectedPreset || showCustomForm" class="mb-6 p-4 bg-gray-50 rounded-lg">
       <div class="flex items-center justify-between mb-3">
-        <h4 class="text-sm font-medium text-gray-700">
-          {{ selectedPreset ? `${selectedPreset.icon} ${selectedPreset.name}` : '自定义运动' }}
+        <h4 class="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <Icons v-if="selectedPreset" :name="selectedPreset.icon" size="md" class="text-gray-600" />
+          {{ selectedPreset ? selectedPreset.name : '自定义运动' }}
         </h4>
         <button
           @click="cancelSelection"
@@ -111,7 +112,7 @@
           class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
         >
           <div class="flex items-center gap-3">
-            <span class="text-2xl">{{ exercise.icon }}</span>
+            <Icons :name="exercise.icon" size="lg" class="text-gray-600" />
             <div>
               <div class="font-medium text-gray-800">{{ exercise.name }}</div>
               <div class="text-xs text-gray-500">{{ exercise.duration }} 分钟</div>
@@ -152,6 +153,7 @@ import { exercisePresets } from '@/data/exercises'
 import { useExercise } from '@/composables/useExercise'
 import { useSettings } from '@/composables/useSettings'
 import { getToday } from '@/utils/date'
+import Icons from '@/components/icons/Icons.vue'
 
 const { todayExercises, todayExerciseCalories, addExercise, removeExercise } = useExercise()
 const { settings } = useSettings()
@@ -214,7 +216,7 @@ function addExerciseRecord() {
     date: getToday(),
     type: selectedPreset.value?.id || 'custom',
     name: selectedPreset.value?.name || customName.value,
-    icon: selectedPreset.value?.icon || '🏃',
+    icon: selectedPreset.value?.icon || 'bolt', // 默认使用闪电图标
     duration: duration.value,
     calories: calculatedCalories.value,
   }
