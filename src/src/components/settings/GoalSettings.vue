@@ -159,14 +159,15 @@ watch(() => settings.value.targetDays, (newTargetDays) => {
   }
 })
 
-// 监听当前体重变化，自动重新计算缺口
-// 注意：不修改 targetWeight，只让 useSettings 自动重新计算 targetDeficit
+// 监听当前体重变化，更新目标体重的默认值
 watch(() => settings.value.weight, (newWeight, oldWeight) => {
-  // 当前体重变化时，保持目标体重不变
-  // useSettings 会自动重新计算 targetDeficit
+  // 如果之前没有设置过目标体重，或者目标体重等于旧体重，则自动更新
+  const oldTargetWeight = settings.value.targetWeight || oldWeight
+  if (!settings.value.targetWeight || settings.value.targetWeight === oldWeight) {
+    form.value.targetWeight = newWeight
+  }
   console.log('当前体重变化:', oldWeight, '→', newWeight)
-  console.log('目标体重保持:', form.value.targetWeight)
-  console.log('新的缺口:', calculateTargetDeficit(newWeight, form.value.targetWeight, form.value.targetDays))
+  console.log('目标体重更新为:', form.value.targetWeight)
 })
 
 // 计算目标缺口
@@ -185,11 +186,21 @@ const targetDeficit = computed(() => {
 })
 
 function handleSubmit() {
+  console.log('保存目标设置:', {
+    goalMode: form.value.goalMode,
+    targetWeight: form.value.targetWeight,
+    targetDays: form.value.targetDays,
+    currentWeight: settings.value.weight,
+  })
+
   updateGoal(
     form.value.goalMode,
     form.value.goalMode === 'target' || form.value.goalMode === 'bulk' ? form.value.targetWeight : undefined,
     form.value.goalMode === 'target' || form.value.goalMode === 'bulk' ? form.value.targetDays : undefined
   )
+
+  console.log('保存后的 settings:', settings.value)
+}
 
   // 如果是高级模式，直接保存缺口值
   if (form.value.goalMode === 'advanced') {
