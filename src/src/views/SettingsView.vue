@@ -11,9 +11,6 @@
     <!-- 目标设置 -->
     <GoalSettings />
 
-    <!-- 估算模式 -->
-    <EstimateModeSelector v-model="estimateMode" />
-
     <!-- API 配置 -->
     <APIConfig />
 
@@ -30,16 +27,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { EstimateMode } from '@/types'
 import { useSettings } from '@/composables/useSettings'
 import ProfileForm from '@/components/settings/ProfileForm.vue'
 import GoalSettings from '@/components/settings/GoalSettings.vue'
-import EstimateModeSelector from '@/components/settings/EstimateModeSelector.vue'
 import APIConfig from '@/components/settings/APIConfig.vue'
 import WeightTracker from '@/components/settings/WeightTracker.vue'
 import DataExportImport from '@/components/settings/DataExportImport.vue'
 import Changelog from '@/components/Changelog.vue'
 
 const { settings } = useSettings()
-const estimateMode = ref<EstimateMode>(settings.value.estimateMode || 'rule')
 </script>
