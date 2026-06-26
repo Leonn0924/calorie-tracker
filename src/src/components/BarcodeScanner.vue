@@ -189,6 +189,7 @@ const calculatedCalories = computed(() => {
 async function takePhoto() {
   cameraLoading.value = true
   error.value = null
+  result.value = null
 
   try {
     codeReader = new BrowserMultiFormatReader()
@@ -198,14 +199,25 @@ async function takePhoto() {
       video: { facingMode: 'environment' }
     })
 
+    // 先设置 scanning 为 true，让 video 元素渲染
+    scanning.value = true
+
+    // 等待 DOM 更新后绑定视频流
+    await new Promise(resolve => setTimeout(resolve, 100))
+
     if (videoElement.value) {
       videoElement.value.srcObject = stream
       await videoElement.value.play()
-      scanning.value = true
+      console.log('摄像头启动成功')
+    } else {
+      console.error('video 元素未找到')
+      error.value = '摄像头初始化失败'
+      scanning.value = false
     }
   } catch (err) {
     console.error('摄像头启动失败:', err)
     error.value = '无法访问摄像头'
+    scanning.value = false
   } finally {
     cameraLoading.value = false
   }
