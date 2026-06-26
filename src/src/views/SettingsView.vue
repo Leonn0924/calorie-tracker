@@ -5,8 +5,8 @@
       <p class="text-sm text-gray-500">配置个人信息、目标和 API 设置</p>
     </div>
 
-    <!-- 个人信息 -->
-    <ProfileForm />
+    <!-- 个人信息卡片 -->
+    <ProfileCard />
 
     <!-- 目标设置 -->
     <GoalSettings />
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useSettings } from '@/composables/useSettings'
-import ProfileForm from '@/components/settings/ProfileForm.vue'
+import ProfileCard from '@/components/settings/ProfileCard.vue'
 import GoalSettings from '@/components/settings/GoalSettings.vue'
 import APIConfig from '@/components/settings/APIConfig.vue'
 import WeightTracker from '@/components/settings/WeightTracker.vue'
