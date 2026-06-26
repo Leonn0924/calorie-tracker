@@ -1,63 +1,100 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-      <svg class="w-5 h-5 text-health-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-      </svg>
-      更新日志
-    </h3>
-
-    <div class="space-y-6">
-      <div
-        v-for="version in versions"
-        :key="version.number"
-        class="relative pl-6 pb-6 border-l-2 border-gray-200 last:border-0 last:pb-0"
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">关于应用</h3>
+        <p class="text-sm text-gray-500">当前版本：V1.2.0</p>
+      </div>
+      <button
+        @click="showModal = true"
+        class="px-4 py-2 bg-health-50 text-health-600 rounded-lg hover:bg-health-100 transition-colors flex items-center gap-2"
       >
-        <!-- 版本节点 -->
-        <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-health-green"></div>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span class="text-sm font-medium">更新日志</span>
+      </button>
+    </div>
+  </div>
 
-        <!-- 版本信息 -->
-        <div class="mb-2">
-          <div class="flex items-center gap-2">
-            <span class="text-lg font-bold text-gray-800">{{ version.number }}</span>
-            <span class="px-2 py-0.5 text-xs rounded-full" :class="getVersionBadgeClass(version)">
-              {{ version.badge }}
-            </span>
-          </div>
-          <div class="text-xs text-gray-500">{{ version.date }}</div>
-        </div>
+  <!-- 弹窗 -->
+  <div
+    v-if="showModal"
+    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    @click.self="showModal = false"
+  >
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden">
+      <!-- 标题栏 -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800">更新日志</h3>
+        <button
+          @click="showModal = false"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
 
-        <!-- 更新内容 -->
-        <div class="space-y-2">
+      <!-- 内容区域 -->
+      <div class="overflow-y-auto max-h-[calc(80vh-140px)] p-4">
+        <div class="space-y-6">
           <div
-            v-for="(item, index) in version.changes"
-            :key="index"
-            class="flex items-start gap-2"
+            v-for="version in versions"
+            :key="version.number"
+            class="relative pl-6 pb-6 border-l-2 border-gray-200 last:border-0 last:pb-0"
           >
-            <Icons :name="getChangeIcon(item.type)" size="sm" class="flex-shrink-0 mt-0.5" :class="getChangeColor(item.type)" />
-            <div class="flex-1 text-sm text-gray-700">
-              {{ item.text }}
+            <!-- 版本节点 -->
+            <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-health-green"></div>
+
+            <!-- 版本信息 -->
+            <div class="mb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-base font-bold text-gray-800">{{ version.number }}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full" :class="getVersionBadgeClass(version)">
+                  {{ version.badge }}
+                </span>
+              </div>
+              <div class="text-xs text-gray-500">{{ version.date }}</div>
+            </div>
+
+            <!-- 更新内容 -->
+            <div class="space-y-2">
+              <div
+                v-for="(item, index) in version.changes"
+                :key="index"
+                class="flex items-start gap-2"
+              >
+                <Icons :name="getChangeIcon(item.type)" size="sm" class="flex-shrink-0 mt-0.5" :class="getChangeColor(item.type)" />
+                <div class="flex-1 text-sm text-gray-700">
+                  {{ item.text }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 更多信息 -->
-    <div class="mt-6 pt-4 border-t border-gray-100 text-center">
-      <a
-        href="https://github.com/Leonn0924/calorie-tracker"
-        target="_blank"
-        class="text-sm text-health-600 hover:text-health-700"
-      >
-        查看完整更新记录 →
-      </a>
+      <!-- 底部 -->
+      <div class="p-4 border-t border-gray-200 bg-gray-50">
+        <a
+          href="https://github.com/Leonn0924/calorie-tracker"
+          target="_blank"
+          class="block w-full py-2 text-center text-sm text-health-600 hover:text-health-700"
+        >
+          查看 GitHub 完整记录 →
+        </a>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import Icons from '@/components/icons/Icons.vue'
+
+const showModal = ref(false)
 
 interface ChangeItem {
   type: 'feat' | 'fix' | 'docs' | 'refactor'
