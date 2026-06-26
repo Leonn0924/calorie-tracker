@@ -26,7 +26,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useSettings } from '@/composables/useSettings'
 import ProfileForm from '@/components/settings/ProfileForm.vue'
 import GoalSettings from '@/components/settings/GoalSettings.vue'
@@ -35,5 +34,5 @@ import WeightTracker from '@/components/settings/WeightTracker.vue'
 import DataExportImport from '@/components/settings/DataExportImport.vue'
 import Changelog from '@/components/Changelog.vue'
 
-const { settings } = useSettings()
+useSettings()
 </script>

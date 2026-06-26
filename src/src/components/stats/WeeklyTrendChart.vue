@@ -178,7 +178,7 @@ interface Stat {
   intake: number
   exercise: number
   netDeficit: number
-  status: DeficitStatus
+  status: DeficitStatus | null
 }
 
 const props = defineProps<{
@@ -199,7 +199,8 @@ const maxCalories = computed(() => {
   return Math.max(maxIntake, maxBudget) * 1.2
 })
 
-function getBarClass(status: DeficitStatus) {
+function getBarClass(status: DeficitStatus | null) {
+  if (!status) return 'bg-gray-500'
   switch (status) {
     case 'in_deficit':
       return 'bg-green-500'

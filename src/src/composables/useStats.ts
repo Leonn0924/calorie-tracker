@@ -44,13 +44,16 @@ export function useStats() {
       const tdee = settings.value.tdee
       const netDeficit = budget + totalExercise - totalIntake
 
-      let status: DeficitStatus
-      if (totalIntake <= budget) {
-        status = 'in_deficit'
-      } else if (totalIntake <= tdee) {
-        status = 'near_limit'
-      } else {
-        status = 'over_budget'
+      // 如果没有记录，状态为 null
+      let status: DeficitStatus | null = null
+      if (meals.length > 0 || exercises.length > 0) {
+        if (totalIntake <= budget) {
+          status = 'in_deficit'
+        } else if (totalIntake <= tdee) {
+          status = 'near_limit'
+        } else {
+          status = 'over_budget'
+        }
       }
 
       return {
