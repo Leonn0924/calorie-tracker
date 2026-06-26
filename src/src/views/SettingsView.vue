@@ -22,6 +22,9 @@
 
     <!-- 数据导出/导入 -->
     <DataExportImport />
+
+    <!-- 更新日志 -->
+    <Changelog />
   </div>
 </template>
 
@@ -35,6 +38,7 @@ import EstimateModeSelector from '@/components/settings/EstimateModeSelector.vue
 import APIConfig from '@/components/settings/APIConfig.vue'
 import WeightTracker from '@/components/settings/WeightTracker.vue'
 import DataExportImport from '@/components/settings/DataExportImport.vue'
+import Changelog from '@/components/Changelog.vue'
 
 const { settings } = useSettings()
 const estimateMode = ref<EstimateMode>(settings.value.estimateMode || 'rule')
