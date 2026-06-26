@@ -13,6 +13,15 @@
       <AchievementRate :achievement="achievementRate" />
     </div>
 
+    <!-- 体重趋势图（新增） -->
+    <WeightTrendChart />
+
+    <!-- 热量摄入趋势图（新增） -->
+    <CalorieIntakeChart />
+
+    <!-- 目标进度条（新增） -->
+    <GoalProgressChart />
+
     <!-- 三餐热量分布 -->
     <MealDistributionChart :distribution="mealDistribution" />
 
@@ -40,6 +49,9 @@ import MealDistributionChart from '@/components/stats/MealDistributionChart.vue'
 import WeeklyTrendChart from '@/components/stats/WeeklyTrendChart.vue'
 import AchievementRate from '@/components/stats/AchievementRate.vue'
 import WeeklySummaryCard from '@/components/stats/WeeklySummaryCard.vue'
+import WeightTrendChart from '@/components/stats/WeightTrendChart.vue'
+import CalorieIntakeChart from '@/components/stats/CalorieIntakeChart.vue'
+import GoalProgressChart from '@/components/stats/GoalProgressChart.vue'
 
 const {
   period,

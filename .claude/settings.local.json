@@ -28,7 +28,9 @@
       "Bash(npx vue-tsc *)",
       "Bash(npx vitest *)",
       "Bash(git tag -a v1.0.0 -m 'V1.0.0 版本快照 *)",
-      "Bash(git tag -a v1.1.0 -m 'V1.1.0 新增条形码扫码识别功能 *)"
+      "Bash(git tag -a v1.1.0 -m 'V1.1.0 新增条形码扫码识别功能 *)",
+      "WebSearch",
+      "Bash(git tag -a v1.2.0 -m 'V1.2.0 新增体重/热量趋势图 *)"
     ]
   }
 }
