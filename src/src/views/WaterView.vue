@@ -242,6 +242,8 @@ const selectedAmount = ref<number>(200)
 
 function handleConfirmAdd() {
   addWater(selectedAmount.value, selectedDrinkType.value)
+  // 显示成功提示
+  alert(`已添加 ${selectedAmount.value}ml ${DRINK_TYPES[selectedDrinkType.value].label}`)
 }
 
 function handleCustomAdd() {
