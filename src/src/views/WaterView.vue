@@ -56,9 +56,9 @@
               :class="selectedDrinkType === type
                 ? 'bg-gradient-to-br from-health-green to-health-green-dark text-white border-2 border-health-green shadow-md scale-105'
                 : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green hover:shadow-sm'"
-              class="p-3 rounded-xl transition-all duration-200 flex flex-col items-center justify-center gap-1"
+              class="p-3 rounded-xl transition-all duration-200 flex flex-col items-center justify-center gap-1.5"
             >
-              <span class="text-2xl">{{ config.icon }}</span>
+              <Icons :name="config.icon" size="lg" class="text-current" />
               <span class="text-xs font-medium">{{ config.label }}</span>
             </button>
           </div>
@@ -120,7 +120,7 @@
             class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
           >
             <div class="flex items-center gap-3">
-              <span class="text-xl">{{ DRINK_TYPES[record.type].icon }}</span>
+              <Icons :name="DRINK_TYPES[record.type].icon" size="md" class="text-gray-600" />
               <div>
                 <div class="font-medium text-gray-800">
                   {{ record.amount }}ml {{ DRINK_TYPES[record.type].label }}
@@ -187,6 +187,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useWater, DRINK_TYPES, type DrinkType } from '@/composables/useWater'
+import Icons from '@/components/icons/Icons.vue'
 
 const { todayStats, addWater, removeWater, clearToday } = useWater()
 

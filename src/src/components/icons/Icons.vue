@@ -109,6 +109,24 @@
     <svg v-else-if="name === 'water'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
     </svg>
+    <svg v-else-if="name === 'coffee'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+    </svg>
+    <svg v-else-if="name === 'tea'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0-2c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zM8 14v6M16 14v6M12 14v6"/>
+    </svg>
+    <svg v-else-if="name === 'juice'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3h10v4a3 3 0 01-3 3H10a3 3 0 01-3-3V3zm0 0L5 8h14l-2-5M12 10v11m-3 0h6"/>
+    </svg>
+    <svg v-else-if="name === 'milk'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3h8v4a4 4 0 01-4 4 4 4 0 01-4-4V3zM8 3H6v18h12V3h-2M8 3l-2 5h12l-2-5"/>
+    </svg>
+    <svg v-else-if="name === 'soda'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 2h8l-1 18H9L8 2zm2 2v4m4-4v4M7 10h10M9 14h6"/>
+    </svg>
+    <svg v-else-if="name === 'other'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+    </svg>
   </span>
 </template>
 

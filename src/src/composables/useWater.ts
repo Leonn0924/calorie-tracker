@@ -10,13 +10,13 @@ export type DrinkType = 'water' | 'coffee' | 'tea' | 'juice' | 'milk' | 'soda' |
 
 // 饮品类型配置
 export const DRINK_TYPES = {
-  water: { label: '水', icon: '', color: 'text-blue-500' },
-  coffee: { label: '咖啡', icon: '☕', color: 'text-amber-700' },
-  tea: { label: '茶', icon: '🍵', color: 'text-green-600' },
-  juice: { label: '果汁', icon: '🧃', color: 'text-orange-500' },
-  milk: { label: '牛奶', icon: '🥛', color: 'text-blue-100' },
-  soda: { label: '汽水', icon: '🥤', color: 'text-red-500' },
-  other: { label: '其他', icon: '🍶', color: 'text-gray-500' },
+  water: { label: '水', icon: 'water', color: 'text-blue-500' },
+  coffee: { label: '咖啡', icon: 'coffee', color: 'text-amber-700' },
+  tea: { label: '茶', icon: 'tea', color: 'text-green-600' },
+  juice: { label: '果汁', icon: 'juice', color: 'text-orange-500' },
+  milk: { label: '牛奶', icon: 'milk', color: 'text-blue-100' },
+  soda: { label: '汽水', icon: 'soda', color: 'text-red-500' },
+  other: { label: '其他', icon: 'other', color: 'text-gray-500' },
 } as const
 
 export function useWater() {
