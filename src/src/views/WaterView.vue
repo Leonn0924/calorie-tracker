@@ -69,25 +69,28 @@
           <label class="block text-sm font-medium text-gray-700 mb-3">选择水量</label>
           <div class="grid grid-cols-4 gap-3">
             <button
-              @click="handleQuickAdd(200)"
-              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+              @click="selectedAmount = 200"
+              :class="selectedAmount === 200 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
+              class="p-3 rounded-xl transition-all duration-200"
             >
-              <div class="text-lg font-bold text-gray-800">200ml</div>
-              <div class="text-xs text-gray-500 mt-0.5">一杯</div>
+              <div class="text-lg font-bold">200ml</div>
+              <div class="text-xs mt-0.5">一杯</div>
             </button>
             <button
-              @click="handleQuickAdd(300)"
-              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+              @click="selectedAmount = 300"
+              :class="selectedAmount === 300 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
+              class="p-3 rounded-xl transition-all duration-200"
             >
-              <div class="text-lg font-bold text-gray-800">300ml</div>
-              <div class="text-xs text-gray-500 mt-0.5">小瓶</div>
+              <div class="text-lg font-bold">300ml</div>
+              <div class="text-xs mt-0.5">小瓶</div>
             </button>
             <button
-              @click="handleQuickAdd(500)"
-              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+              @click="selectedAmount = 500"
+              :class="selectedAmount === 500 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
+              class="p-3 rounded-xl transition-all duration-200"
             >
-              <div class="text-lg font-bold text-gray-800">500ml</div>
-              <div class="text-xs text-gray-500 mt-0.5">标准瓶</div>
+              <div class="text-lg font-bold">500ml</div>
+              <div class="text-xs mt-0.5">标准瓶</div>
             </button>
             <button
               @click="showCustomInput = true"
@@ -98,6 +101,14 @@
             </button>
           </div>
         </div>
+
+        <!-- 确认添加按钮 -->
+        <button
+          @click="handleConfirmAdd"
+          class="w-full mt-4 py-3 bg-gradient-to-r from-health-green to-health-green-dark text-white font-medium rounded-xl hover:shadow-lg transition-all duration-200"
+        >
+          确认添加 {{ selectedAmount }}ml {{ DRINK_TYPES[selectedDrinkType].label }}
+        </button>
       </div>
 
       <!-- 历史记录 -->
@@ -194,9 +205,10 @@ const { todayStats, addWater, removeWater, clearToday } = useWater()
 const showCustomInput = ref(false)
 const customAmount = ref<number>(300)
 const selectedDrinkType = ref<DrinkType>('water')
+const selectedAmount = ref<number>(200)
 
-function handleQuickAdd(amount: number) {
-  addWater(amount, selectedDrinkType.value)
+function handleConfirmAdd() {
+  addWater(selectedAmount.value, selectedDrinkType.value)
 }
 
 function handleCustomAdd() {
@@ -204,6 +216,7 @@ function handleCustomAdd() {
     addWater(customAmount.value, selectedDrinkType.value)
     showCustomInput.value = false
     customAmount.value = 300
+    selectedAmount.value = 300
   }
 }
 
