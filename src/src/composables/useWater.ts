@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import type { DrinkRecord, DailyDrinkStats } from '@/types'
 import { storage } from '@/utils/storage'
 import { getToday, formatTime } from '@/utils/date'
@@ -19,9 +19,14 @@ export const DRINK_TYPES = {
   other: { label: '其他', icon: 'other', color: 'text-gray-500' },
 } as const
 
+// 创建一个响应式的刷新标记
+const refreshTrigger = ref(0)
+
 export function useWater() {
   // 获取今日饮品记录
   const todayRecords = computed(() => {
+    // 依赖 refreshTrigger，当它变化时重新计算
+    void refreshTrigger.value
     const all = storage.get<DrinkRecord[]>(DRINK_RECORDS_KEY) || []
     const today = getToday()
     return all.filter(r => r.createdAt.startsWith(today))
@@ -77,6 +82,9 @@ export function useWater() {
     all.push(record)
     storage.set(DRINK_RECORDS_KEY, all)
 
+    // 触发响应式更新
+    refreshTrigger.value++
+
     return record
   }
 
@@ -85,6 +93,9 @@ export function useWater() {
     const all = storage.get<DrinkRecord[]>(DRINK_RECORDS_KEY) || []
     const filtered = all.filter(r => r.id !== id)
     storage.set(DRINK_RECORDS_KEY, filtered)
+
+    // 触发响应式更新
+    refreshTrigger.value++
   }
 
   // 清空今日记录
@@ -93,6 +104,9 @@ export function useWater() {
     const today = getToday()
     const filtered = all.filter(r => !r.createdAt.startsWith(today))
     storage.set(DRINK_RECORDS_KEY, filtered)
+
+    // 触发响应式更新
+    refreshTrigger.value++
   }
 
   // 获取今日统计
