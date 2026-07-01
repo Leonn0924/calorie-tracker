@@ -3,7 +3,7 @@
     <div class="bg-white shadow-sm">
       <div class="px-4 py-6">
         <h1 class="text-2xl font-bold text-gray-900">今日饮水</h1>
-        <p class="text-sm text-gray-500 mt-1">保持充足水分，促进新陈代谢</p>
+        <p class="text-sm text-gray-500 mt-1">记录所有饮品，保持充足水分</p>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
             class="text-2xl"
             :class="i * 250 <= todayStats.total ? 'opacity-100' : 'opacity-20'"
           >
-            💧
+
           </span>
         </div>
       </div>
@@ -44,20 +44,39 @@
       <!-- 快速添加 -->
       <div class="bg-white rounded-xl shadow-sm p-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">快速添加</h3>
+
+        <!-- 饮品类型选择 -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">选择饮品</label>
+          <div class="grid grid-cols-4 gap-2">
+            <button
+              v-for="(config, type) in DRINK_TYPES"
+              :key="type"
+              @click="selectedDrinkType = type"
+              :class="selectedDrinkType === type ? 'bg-health-green text-white border-health-green' : 'bg-gray-50 text-gray-700 border-gray-200'"
+              class="p-2 rounded-lg border-2 transition-colors text-center"
+            >
+              <div class="text-lg">{{ config.icon }}</div>
+              <div class="text-xs mt-0.5">{{ config.label }}</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 水量选择 -->
         <div class="grid grid-cols-4 gap-3">
           <button
             @click="handleQuickAdd(200)"
             class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <div class="text-lg font-medium text-gray-800">200ml</div>
-            <div class="text-xs text-gray-500">一杯水</div>
+            <div class="text-xs text-gray-500">一杯</div>
           </button>
           <button
             @click="handleQuickAdd(300)"
             class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <div class="text-lg font-medium text-gray-800">300ml</div>
-            <div class="text-xs text-gray-500">小瓶水</div>
+            <div class="text-xs text-gray-500">小瓶</div>
           </button>
           <button
             @click="handleQuickAdd(500)"
@@ -71,7 +90,7 @@
             class="p-3 bg-health-50 rounded-lg hover:bg-health-100 transition-colors"
           >
             <div class="text-lg font-medium text-health-600">自定义</div>
-            <div class="text-xs text-health-500">其他水量</div>
+            <div class="text-xs text-health-500">其他</div>
           </button>
         </div>
       </div>
@@ -96,9 +115,11 @@
             class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
           >
             <div class="flex items-center gap-3">
-              <span class="text-xl">💧</span>
+              <span class="text-xl">{{ DRINK_TYPES[record.type].icon }}</span>
               <div>
-                <div class="font-medium text-gray-800">{{ record.amount }}ml</div>
+                <div class="font-medium text-gray-800">
+                  {{ record.amount }}ml {{ DRINK_TYPES[record.type].label }}
+                </div>
                 <div class="text-xs text-gray-500">{{ record.time }}</div>
               </div>
             </div>
@@ -115,7 +136,7 @@
 
         <div v-else class="text-center py-8 text-gray-400">
           <div class="text-4xl mb-2 opacity-50">💧</div>
-          <p class="text-sm">今天还没有喝水记录</p>
+          <p class="text-sm">今天还没有饮品记录</p>
           <p class="text-xs mt-1">点击上方按钮快速添加</p>
         </div>
       </div>
@@ -160,20 +181,21 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useWater } from '@/composables/useWater'
+import { useWater, DRINK_TYPES, type DrinkType } from '@/composables/useWater'
 
 const { todayStats, addWater, removeWater, clearToday } = useWater()
 
 const showCustomInput = ref(false)
 const customAmount = ref<number>(300)
+const selectedDrinkType = ref<DrinkType>('water')
 
 function handleQuickAdd(amount: number) {
-  addWater(amount)
+  addWater(amount, selectedDrinkType.value)
 }
 
 function handleCustomAdd() {
   if (customAmount.value && customAmount.value > 0) {
-    addWater(customAmount.value)
+    addWater(customAmount.value, selectedDrinkType.value)
     showCustomInput.value = false
     customAmount.value = 300
   }
@@ -186,7 +208,7 @@ function handleRemove(id: string) {
 }
 
 function handleClearToday() {
-  if (confirm('确定要清空今日所有喝水记录吗？')) {
+  if (confirm('确定要清空今日所有饮品记录吗？')) {
     clearToday()
   }
 }

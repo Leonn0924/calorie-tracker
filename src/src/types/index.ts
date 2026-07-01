@@ -133,19 +133,29 @@ export interface DailyStats {
   exercises: ExerciseRecord[]
 }
 
-// 喝水记录
-export interface WaterRecord {
+// 饮品记录
+export interface DrinkRecord {
   id: string
+  type: 'water' | 'coffee' | 'tea' | 'juice' | 'milk' | 'soda' | 'other'  // 饮品类型
   amount: number        // 水量（ml）
   time: string          // 时间（HH:mm）
   note?: string         // 备注（可选）
   createdAt: string     // 创建时间
 }
 
-// 喝水统计
-export interface DailyWaterStats {
+// 饮品统计
+export interface DailyDrinkStats {
   total: number         // 总水量
-  records: WaterRecord[] // 记录列表
+  records: DrinkRecord[] // 记录列表
   goal: number          // 目标水量（默认 2000ml）
   progress: number      // 进度百分比
+  byType: {             // 按类型统计
+    water: number
+    coffee: number
+    tea: number
+    juice: number
+    milk: number
+    soda: number
+    other: number
+  }
 }
