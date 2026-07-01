@@ -54,49 +54,79 @@
               :key="type"
               @click="selectedDrinkType = type"
               :class="selectedDrinkType === type
-                ? 'bg-gradient-to-br from-health-green to-health-green-dark text-white border-2 border-health-green shadow-md scale-105'
-                : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green hover:shadow-sm'"
-              class="p-3 rounded-xl transition-all duration-200 flex flex-col items-center justify-center gap-1.5"
+                ? 'bg-green-50 border-2 border-health-green shadow-sm'
+                : 'bg-gray-50 border-2 border-gray-200 hover:border-gray-300'"
+              class="p-4 rounded-lg transition-all duration-200 flex flex-col items-center justify-center gap-2"
             >
-              <Icons :name="config.icon" size="lg" class="text-current" />
-              <span class="text-xs font-medium">{{ config.label }}</span>
+              <Icons
+                :name="config.icon"
+                size="xl"
+                :class="selectedDrinkType === type ? 'text-health-green' : 'text-gray-600'"
+              />
+              <span
+                class="text-sm font-medium"
+                :class="selectedDrinkType === type ? 'text-health-green' : 'text-gray-700'"
+              >
+                {{ config.label }}
+              </span>
             </button>
           </div>
         </div>
 
         <!-- 水量选择 -->
-        <div>
+        <div class="mb-6">
           <label class="block text-sm font-medium text-gray-700 mb-3">选择水量</label>
           <div class="grid grid-cols-4 gap-3">
             <button
               @click="selectedAmount = 200"
-              :class="selectedAmount === 200 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
-              class="p-3 rounded-xl transition-all duration-200"
+              :class="selectedAmount === 200
+                ? 'bg-green-50 border-2 border-health-green shadow-sm'
+                : 'bg-gray-50 border-2 border-gray-200 hover:border-gray-300'"
+              class="p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center"
             >
-              <div class="text-lg font-bold">200ml</div>
-              <div class="text-xs mt-0.5">一杯</div>
+              <div
+                class="text-base font-bold"
+                :class="selectedAmount === 200 ? 'text-health-green' : 'text-gray-800'"
+              >
+                200ml
+              </div>
+              <div class="text-xs text-gray-500 mt-0.5">一杯</div>
             </button>
             <button
               @click="selectedAmount = 300"
-              :class="selectedAmount === 300 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
-              class="p-3 rounded-xl transition-all duration-200"
+              :class="selectedAmount === 300
+                ? 'bg-green-50 border-2 border-health-green shadow-sm'
+                : 'bg-gray-50 border-2 border-gray-200 hover:border-gray-300'"
+              class="p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center"
             >
-              <div class="text-lg font-bold">300ml</div>
-              <div class="text-xs mt-0.5">小瓶</div>
+              <div
+                class="text-base font-bold"
+                :class="selectedAmount === 300 ? 'text-health-green' : 'text-gray-800'"
+              >
+                300ml
+              </div>
+              <div class="text-xs text-gray-500 mt-0.5">小瓶</div>
             </button>
             <button
               @click="selectedAmount = 500"
-              :class="selectedAmount === 500 ? 'bg-health-green text-white border-2 border-health-green shadow-md' : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green'"
-              class="p-3 rounded-xl transition-all duration-200"
+              :class="selectedAmount === 500
+                ? 'bg-green-50 border-2 border-health-green shadow-sm'
+                : 'bg-gray-50 border-2 border-gray-200 hover:border-gray-300'"
+              class="p-3 rounded-lg transition-all duration-200 flex flex-col items-center justify-center"
             >
-              <div class="text-lg font-bold">500ml</div>
-              <div class="text-xs mt-0.5">标准瓶</div>
+              <div
+                class="text-base font-bold"
+                :class="selectedAmount === 500 ? 'text-health-green' : 'text-gray-800'"
+              >
+                500ml
+              </div>
+              <div class="text-xs text-gray-500 mt-0.5">标准瓶</div>
             </button>
             <button
               @click="showCustomInput = true"
-              class="p-3 bg-gradient-to-br from-health-50 to-health-100 rounded-xl hover:from-health-100 hover:to-health-200 transition-all border-2 border-health-200"
+              class="bg-health-50 border-2 border-health-200 rounded-lg p-3 hover:bg-health-100 transition-all duration-200 flex flex-col items-center justify-center"
             >
-              <div class="text-lg font-bold text-health-700">自定义</div>
+              <div class="text-base font-bold text-health-700">自定义</div>
               <div class="text-xs text-health-600 mt-0.5">其他</div>
             </button>
           </div>
@@ -105,9 +135,12 @@
         <!-- 确认添加按钮 -->
         <button
           @click="handleConfirmAdd"
-          class="w-full mt-4 py-3 bg-gradient-to-r from-health-green to-health-green-dark text-white font-medium rounded-xl hover:shadow-lg transition-all duration-200"
+          class="w-full py-3.5 bg-gradient-to-r from-health-green to-health-green-dark text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2"
         >
-          确认添加 {{ selectedAmount }}ml {{ DRINK_TYPES[selectedDrinkType].label }}
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span>确认添加 {{ selectedAmount }}ml {{ DRINK_TYPES[selectedDrinkType].label }}</span>
         </button>
       </div>
 
