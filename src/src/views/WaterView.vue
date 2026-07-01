@@ -46,52 +46,57 @@
         <h3 class="text-lg font-semibold text-gray-800 mb-4">快速添加</h3>
 
         <!-- 饮品类型选择 -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">选择饮品</label>
-          <div class="grid grid-cols-4 gap-2">
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">选择饮品</label>
+          <div class="grid grid-cols-4 gap-3">
             <button
               v-for="(config, type) in DRINK_TYPES"
               :key="type"
               @click="selectedDrinkType = type"
-              :class="selectedDrinkType === type ? 'bg-health-green text-white border-health-green' : 'bg-gray-50 text-gray-700 border-gray-200'"
-              class="p-2 rounded-lg border-2 transition-colors text-center"
+              :class="selectedDrinkType === type
+                ? 'bg-gradient-to-br from-health-green to-health-green-dark text-white border-2 border-health-green shadow-md scale-105'
+                : 'bg-gray-50 text-gray-700 border-2 border-gray-200 hover:border-health-green hover:shadow-sm'"
+              class="p-3 rounded-xl transition-all duration-200 flex flex-col items-center justify-center gap-1"
             >
-              <div class="text-lg">{{ config.icon }}</div>
-              <div class="text-xs mt-0.5">{{ config.label }}</div>
+              <span class="text-2xl">{{ config.icon }}</span>
+              <span class="text-xs font-medium">{{ config.label }}</span>
             </button>
           </div>
         </div>
 
         <!-- 水量选择 -->
-        <div class="grid grid-cols-4 gap-3">
-          <button
-            @click="handleQuickAdd(200)"
-            class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <div class="text-lg font-medium text-gray-800">200ml</div>
-            <div class="text-xs text-gray-500">一杯</div>
-          </button>
-          <button
-            @click="handleQuickAdd(300)"
-            class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <div class="text-lg font-medium text-gray-800">300ml</div>
-            <div class="text-xs text-gray-500">小瓶</div>
-          </button>
-          <button
-            @click="handleQuickAdd(500)"
-            class="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <div class="text-lg font-medium text-gray-800">500ml</div>
-            <div class="text-xs text-gray-500">标准瓶</div>
-          </button>
-          <button
-            @click="showCustomInput = true"
-            class="p-3 bg-health-50 rounded-lg hover:bg-health-100 transition-colors"
-          >
-            <div class="text-lg font-medium text-health-600">自定义</div>
-            <div class="text-xs text-health-500">其他</div>
-          </button>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">选择水量</label>
+          <div class="grid grid-cols-4 gap-3">
+            <button
+              @click="handleQuickAdd(200)"
+              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+            >
+              <div class="text-lg font-bold text-gray-800">200ml</div>
+              <div class="text-xs text-gray-500 mt-0.5">一杯</div>
+            </button>
+            <button
+              @click="handleQuickAdd(300)"
+              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+            >
+              <div class="text-lg font-bold text-gray-800">300ml</div>
+              <div class="text-xs text-gray-500 mt-0.5">小瓶</div>
+            </button>
+            <button
+              @click="handleQuickAdd(500)"
+              class="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border-2 border-gray-200 hover:border-health-green"
+            >
+              <div class="text-lg font-bold text-gray-800">500ml</div>
+              <div class="text-xs text-gray-500 mt-0.5">标准瓶</div>
+            </button>
+            <button
+              @click="showCustomInput = true"
+              class="p-3 bg-gradient-to-br from-health-50 to-health-100 rounded-xl hover:from-health-100 hover:to-health-200 transition-all border-2 border-health-200"
+            >
+              <div class="text-lg font-bold text-health-700">自定义</div>
+              <div class="text-xs text-health-600 mt-0.5">其他</div>
+            </button>
+          </div>
         </div>
       </div>
 
