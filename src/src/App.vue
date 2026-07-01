@@ -92,6 +92,7 @@ import TodaySummary from '@/components/TodaySummary.vue'
 import TabButton from '@/components/TabButton.vue'
 import RecordView from '@/views/RecordView.vue'
 import FoodLibraryView from '@/views/FoodLibraryView.vue'
+import WaterView from '@/views/WaterView.vue'
 import StatsView from '@/views/StatsView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { useDailyStats } from '@/composables/useDailyStats'
@@ -100,11 +101,12 @@ import { useSettings } from '@/composables/useSettings'
 const { dailyStats } = useDailyStats()
 const { settings } = useSettings()
 
-const currentTab = ref<'record' | 'food' | 'stats' | 'settings'>('record')
+const currentTab = ref<'record' | 'food' | 'water' | 'stats' | 'settings'>('record')
 
 const tabs = [
   { id: 'record' as const, label: '记录', icon: 'svg-clipboard' },
   { id: 'food' as const, label: '食物库', icon: 'svg-list' },
+  { id: 'water' as const, label: '喝水', icon: 'svg-water' },
   { id: 'stats' as const, label: '统计', icon: 'svg-chart' },
   { id: 'settings' as const, label: '设置', icon: 'svg-settings' },
 ]
@@ -113,6 +115,7 @@ const currentComponent = computed(() => {
   switch (currentTab.value) {
     case 'record': return RecordView
     case 'food': return FoodLibraryView
+    case 'water': return WaterView
     case 'stats': return StatsView
     case 'settings': return SettingsView
   }

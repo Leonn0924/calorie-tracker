@@ -106,6 +106,9 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
       <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
     </svg>
+    <svg v-else-if="name === 'water'" class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+    </svg>
   </span>
 </template>
 

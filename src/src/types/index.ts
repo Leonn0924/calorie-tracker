@@ -132,3 +132,20 @@ export interface DailyStats {
   meals: MealRecord[]
   exercises: ExerciseRecord[]
 }
+
+// 喝水记录
+export interface WaterRecord {
+  id: string
+  amount: number        // 水量（ml）
+  time: string          // 时间（HH:mm）
+  note?: string         // 备注（可选）
+  createdAt: string     // 创建时间
+}
+
+// 喝水统计
+export interface DailyWaterStats {
+  total: number         // 总水量
+  records: WaterRecord[] // 记录列表
+  goal: number          // 目标水量（默认 2000ml）
+  progress: number      // 进度百分比
+}
